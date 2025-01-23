@@ -26,4 +26,7 @@ public class ShoppingService {
         return user.getCouponDiscountRate();
     }
 
+    public int getUserPoint() {
+        return user.getPoint();
+    }
 }

@@ -28,4 +28,8 @@ public class User {
     public int getCouponDiscountRate() {
         return coupon.getDiscountRate();
     }
+
+    public int getPoint() {
+        return point;
+    }
 }

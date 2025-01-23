@@ -27,7 +27,10 @@ public class ShoppingController {
                 run();
             }
             case "3" -> System.out.println("2");
-            case "4" -> System.out.println("2");
+            case "4" -> {
+                showUserPoint();
+                run();
+            }
             case "5" -> System.out.println("2");
             default -> System.out.println("default");
         }
@@ -54,5 +57,9 @@ public class ShoppingController {
                 run();
             }
         }
+    }
+
+    private void showUserPoint() {
+        outputView.printUserPoint(shoppingService.getUserPoint());
     }
 }
