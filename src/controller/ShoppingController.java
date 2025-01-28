@@ -1,10 +1,13 @@
 package controller;
 
+import dto.ProductSimpleInfo;
 import service.ShoppingService;
 import view.InputView;
 import view.OutputView;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class ShoppingController {
     private final InputView inputView;
@@ -21,7 +24,7 @@ public class ShoppingController {
         String userMainInput = readUserMainInput();
 
         switch (userMainInput) {
-            case "1" -> System.out.println("hi");
+            case "1" -> browseProductProcess();
             case "2" -> {
                 issueRandomCoupon();
                 run();
@@ -33,6 +36,20 @@ public class ShoppingController {
             }
             case "5" -> System.out.println("2");
             default -> System.out.println("default");
+        }
+    }
+
+    private boolean browseProductProcess() throws IOException {
+        Map<String, List<ProductSimpleInfo>> productSimpleInfos = shoppingService.getProducts();
+        outputView.printProductSimpleInfo(productSimpleInfos);
+
+        while (true) {
+            try {
+                inputView.readBrowseProductUserInput();
+                return true;
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
         }
     }
 

@@ -1,6 +1,13 @@
 package view;
 
+import dto.ProductSimpleInfo;
+
+import java.util.List;
+import java.util.Map;
+
 public class OutputView {
+    private static final String TOP = "TOP";
+    private static final String BOTTOM = "BOTTOM";
 
     public void printExceptionMessage(IllegalArgumentException exception) {
         System.out.println(exception.getMessage());
@@ -13,5 +20,30 @@ public class OutputView {
 
     public void printUserPoint(int userPoint) {
         System.out.println("고객님의 포인트는 " + userPoint + "원 존재합니다.\n");
+    }
+
+    public void printProductSimpleInfo(Map<String, List<ProductSimpleInfo>> productSimpleInfos) {
+        System.out.println("상품을 구경하고 맘에드는 상품을 장바구니에 넣어보세요.\n");
+        System.out.println("[Top]");
+        System.out.println("-----------------------------");
+        List<ProductSimpleInfo> tops = productSimpleInfos.get(TOP);
+        for (ProductSimpleInfo top : tops) {
+            System.out.println(formatProductInfo(top));
+        }
+
+        System.out.println("\n[Bottom]");
+        System.out.println("-----------------------------");
+        List<ProductSimpleInfo> bottoms = productSimpleInfos.get(BOTTOM);
+        for (ProductSimpleInfo bottom : bottoms) {
+            System.out.println(formatProductInfo(bottom));
+        }
+    }
+
+    private String formatProductInfo(ProductSimpleInfo product) {
+        return "- [%s] %s사이즈, %s%d개 남음 ".formatted(product.name(), product.size(), formatPrice(product.price()), product.quantity());
+    }
+
+    private String formatPrice(int price) {
+        return String.format("%,d원, ", price);
     }
 }

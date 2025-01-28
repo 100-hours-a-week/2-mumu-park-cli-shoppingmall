@@ -1,11 +1,14 @@
 package service;
 
 import constant.ErrorMessage;
+import dto.ProductSimpleInfo;
 import model.shoppingMall.ShoppingMall;
 import model.user.User;
 import util.CouponGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 public class ShoppingService {
 
@@ -28,5 +31,9 @@ public class ShoppingService {
 
     public int getUserPoint() {
         return user.getPoint();
+    }
+
+    public Map<String, List<ProductSimpleInfo>> getProducts() {
+        return shoppingMall.getProductsSimpleInfo();
     }
 }

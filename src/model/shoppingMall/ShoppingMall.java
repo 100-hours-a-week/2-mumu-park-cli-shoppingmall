@@ -1,8 +1,12 @@
 package model.shoppingMall;
 
+import dto.ProductSimpleInfo;
 import model.shoppingMall.history.HistoryManagement;
 import model.shoppingMall.payment.PaymentManagement;
 import model.shoppingMall.product.ProductManagement;
+
+import java.util.List;
+import java.util.Map;
 
 public class ShoppingMall {
     private final ProductManagement productManagement;
@@ -14,4 +18,9 @@ public class ShoppingMall {
         this.historyManagement = historyManagement;
         this.paymentManagement = paymentManagement;
     }
+
+    public Map<String, List<ProductSimpleInfo>> getProductsSimpleInfo() {
+        return productManagement.getProductsSimpleInfo();
+    }
+
 }

@@ -1,9 +1,13 @@
 package model.shoppingMall.product;
 
-public class Product {
-    private String name;
-    private int price;
-    private int quantity;
+import dto.ProductSimpleInfo;
+
+import java.util.List;
+
+public abstract class Product {
+    protected final String name;
+    protected final int price;
+    protected int quantity;
 
     public Product(String name, int price, int quantity) {
         this.name = name;

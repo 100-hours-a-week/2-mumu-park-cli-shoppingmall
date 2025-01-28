@@ -20,6 +20,21 @@ public class InputView {
         return userInput;
     }
 
+    public String readBrowseProductUserInput() throws IOException {
+        System.out.println(
+                """
+                
+                아래의 메뉴를 선택해주세요
+                1. 상품 상세보기
+                2. 장바구니 담기
+                """
+        );
+
+        String userInput = br.readLine();
+        checkValidBrowseProductInput(userInput);
+        return userInput;
+    }
+
     private void printMainPage() {
         System.out.println("안녕하세요. 무무 쇼핑몰 입니다.");
         System.out.println();
@@ -45,6 +60,22 @@ public class InputView {
 
         if (flag) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_MAIN_INPUT.getMessage());
+        }
+    }
+
+    private void checkValidBrowseProductInput(String userInput) {
+        String[] validMainInputValues = {"1", "2"};
+
+        boolean flag = true;
+        for (String validMainInputValue : validMainInputValues) {
+            if (userInput.equals(validMainInputValue)) {
+                flag = false;
+                break;
+            }
+        }
+
+        if (flag) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_BROWSE_PRODUCT_INPUT.getMessage());
         }
     }
 }
