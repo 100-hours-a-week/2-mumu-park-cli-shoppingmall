@@ -1,12 +1,17 @@
 package model.shoppingMall;
 
-import java.util.ArrayList;
-import java.util.List;
+import model.shoppingMall.history.HistoryManagement;
+import model.shoppingMall.payment.PaymentManagement;
+import model.shoppingMall.product.ProductManagement;
 
 public class ShoppingMall {
-    private List<Product> products = new ArrayList<>();
+    private final ProductManagement productManagement;
+    private final HistoryManagement historyManagement;
+    private final PaymentManagement paymentManagement;
 
-    public ShoppingMall(List<Product> products) {
-        this.products = products;
+    public ShoppingMall(ProductManagement productManagement, HistoryManagement historyManagement, PaymentManagement paymentManagement) {
+        this.productManagement = productManagement;
+        this.historyManagement = historyManagement;
+        this.paymentManagement = paymentManagement;
     }
 }

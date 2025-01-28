@@ -32,4 +32,8 @@ public class User {
     public int getPoint() {
         return point;
     }
+
+    public void plusPoint(int accumulatedPoint) {
+        this.point += accumulatedPoint;
+    }
 }

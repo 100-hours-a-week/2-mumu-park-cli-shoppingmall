@@ -1,7 +1,9 @@
-package model.shoppingMall;
+package model.shoppingMall.product;
+
+import model.shoppingMall.product.Clothes;
 
 public class Top extends Clothes {
-    private int length;
+    private final int length;
 
     public Top(String name, int price, int quantity, char size, int length) {
         super(name, price, quantity, size);

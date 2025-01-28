@@ -1,4 +1,4 @@
-package model.shoppingMall;
+package model.shoppingMall.product;
 
 public class Clothes extends Product {
     private char size;
