@@ -1,5 +1,6 @@
 package controller;
 
+import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 import service.ShoppingService;
 import view.InputView;
@@ -39,14 +40,39 @@ public class ShoppingController {
         }
     }
 
-    private boolean browseProductProcess() throws IOException {
+    private void browseProductProcess() throws IOException {
         Map<String, List<ProductSimpleInfo>> productSimpleInfos = shoppingService.getProducts();
         outputView.printProductSimpleInfo(productSimpleInfos);
 
+        handleBrowseProductInput();
+    }
+
+    private void handleBrowseProductInput() throws IOException {
+        processBrowseProductUserInput(readBrowseProductUserInput());
+    }
+
+    private String readBrowseProductUserInput() throws IOException {
         while (true) {
             try {
-                inputView.readBrowseProductUserInput();
-                return true;
+                return inputView.readBrowseProductUserInput();
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
+    }
+
+    private void processBrowseProductUserInput(String userInput) throws IOException {
+        while (true) {
+            try {
+                if (userInput.equals("1")) {
+                    String productName = inputView.readProductName();
+                    ProductDetailInfo detailInfo = shoppingService.getProductDetailInfoByName(productName);
+                    outputView.printProductDetailInfo(detailInfo);
+                    handleBrowseProductInput();
+                } else {
+                    System.out.println("Todo : 장바구니 담기 구현");
+                }
+                break;
             } catch (IllegalArgumentException e) {
                 outputView.printExceptionMessage(e);
             }

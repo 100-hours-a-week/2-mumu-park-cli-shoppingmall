@@ -35,6 +35,14 @@ public class InputView {
         return userInput;
     }
 
+    public String readProductName() throws IOException {
+        System.out.println("상품 상세를 보고싶은 상품명을 입력해주세요.");
+        String productName = br.readLine();
+        checkEmptyInput(productName);
+
+        return productName;
+    }
+
     private void printMainPage() {
         System.out.println("안녕하세요. 무무 쇼핑몰 입니다.");
         System.out.println();
@@ -45,6 +53,12 @@ public class InputView {
         System.out.println("5. 쇼핑 그만하기");
 
         System.out.println("메뉴중 하나를 선택해주세요. (ex. 1)");
+    }
+
+    private void checkEmptyInput(String userInput) {
+        if (userInput == null || userInput.isEmpty()) {
+            throw new IllegalArgumentException(ErrorMessage.EMPTY_INPUT.getMessage());
+        }
     }
 
     private void checkValidMainInput(String userInput) {

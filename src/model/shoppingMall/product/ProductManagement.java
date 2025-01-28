@@ -1,6 +1,9 @@
 package model.shoppingMall.product;
 
+import constant.ErrorMessage;
+import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
+import dto.TopDetailInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,5 +35,20 @@ public class ProductManagement {
         productSimpleInfos.put("BOTTOM", bottoms);
 
         return productSimpleInfos;
+    }
+
+    public ProductDetailInfo findProductDetailByName(String productName) {
+        Product product = products.stream()
+                .filter((p -> p.getName().equals(productName)))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_PRODUCT.getMessage()));
+
+        if (product instanceof Top) {
+            Top top = (Top) product;
+            return top.generateDetailInfo();
+        }
+
+        Bottom bottom = (Bottom) product;
+        return bottom.generateDetailInfo();
     }
 }

@@ -1,6 +1,7 @@
 package service;
 
 import constant.ErrorMessage;
+import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 import model.shoppingMall.ShoppingMall;
 import model.user.User;
@@ -35,5 +36,10 @@ public class ShoppingService {
 
     public Map<String, List<ProductSimpleInfo>> getProducts() {
         return shoppingMall.getProductsSimpleInfo();
+    }
+
+    public ProductDetailInfo getProductDetailInfoByName(String productName) {
+        return shoppingMall.findProductDetailByName(productName);
+
     }
 }

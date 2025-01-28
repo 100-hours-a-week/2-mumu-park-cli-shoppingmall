@@ -1,5 +1,6 @@
 package view;
 
+import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 
 import java.util.List;
@@ -25,25 +26,34 @@ public class OutputView {
     public void printProductSimpleInfo(Map<String, List<ProductSimpleInfo>> productSimpleInfos) {
         System.out.println("상품을 구경하고 맘에드는 상품을 장바구니에 넣어보세요.\n");
         System.out.println("[Top]");
-        System.out.println("-----------------------------");
+        System.out.println("-------------------------------------------------------");
         List<ProductSimpleInfo> tops = productSimpleInfos.get(TOP);
         for (ProductSimpleInfo top : tops) {
-            System.out.println(formatProductInfo(top));
+            System.out.println(formatProductSimpleInfo(top));
         }
 
         System.out.println("\n[Bottom]");
-        System.out.println("-----------------------------");
+        System.out.println("-------------------------------------------------------");
         List<ProductSimpleInfo> bottoms = productSimpleInfos.get(BOTTOM);
         for (ProductSimpleInfo bottom : bottoms) {
-            System.out.println(formatProductInfo(bottom));
+            System.out.println(formatProductSimpleInfo(bottom));
         }
     }
 
-    private String formatProductInfo(ProductSimpleInfo product) {
-        return "- [%s] %s사이즈, %s%d개 남음 ".formatted(product.name(), product.size(), formatPrice(product.price()), product.quantity());
+    public void printProductDetailInfo(ProductDetailInfo detailInfo) {
+        System.out.println("-------------------------------------------------------");
+        System.out.println("[%s]의 상세정보 입니다.".formatted(detailInfo.name()));
+        System.out.println("-------------------------------------------------------");
+        System.out.print(detailInfo.getDetail());
+        System.out.println("가격 - " + formatPrice(detailInfo.price()));
+    }
+
+    private String formatProductSimpleInfo(ProductSimpleInfo product) {
+        return "- [%s] %s사이즈, %s, %d개 남음 ".formatted(product.name(), product.size(), formatPrice(product.price()), product.quantity());
     }
 
     private String formatPrice(int price) {
-        return String.format("%,d원, ", price);
+        return String.format("%,d원", price);
     }
 }
+

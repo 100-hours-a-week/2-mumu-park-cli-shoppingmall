@@ -19,4 +19,8 @@ public abstract class Product {
         // Todo : 0개일때 예외처리
         this.quantity--;
     }
+
+    public String getName() {
+        return this.name;
+    }
 }

@@ -3,7 +3,7 @@ package model.shoppingMall.product;
 import dto.ProductSimpleInfo;
 
 public class Clothes extends Product {
-    private final char size;
+    protected final char size;
 
     public Clothes(String name, int price, int quantity, char size) {
         super(name, price, quantity);

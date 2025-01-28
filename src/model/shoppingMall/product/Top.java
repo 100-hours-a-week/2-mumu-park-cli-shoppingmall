@@ -1,5 +1,6 @@
 package model.shoppingMall.product;
 
+import dto.TopDetailInfo;
 import model.shoppingMall.product.Clothes;
 
 public class Top extends Clothes {
@@ -14,5 +15,18 @@ public class Top extends Clothes {
         this.shoulder = shoulder;
         this.chest = chest;
         this.sleeves = sleeves;
+    }
+
+    public TopDetailInfo generateDetailInfo() {
+        return new TopDetailInfo(
+                this.name,
+                this.size,
+                this.length,
+                this.shoulder,
+                this.chest,
+                this.sleeves,
+                this.quantity,
+                this.price
+        );
     }
 }

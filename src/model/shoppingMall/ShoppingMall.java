@@ -1,5 +1,6 @@
 package model.shoppingMall;
 
+import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 import model.shoppingMall.history.HistoryManagement;
 import model.shoppingMall.payment.PaymentManagement;
@@ -21,6 +22,10 @@ public class ShoppingMall {
 
     public Map<String, List<ProductSimpleInfo>> getProductsSimpleInfo() {
         return productManagement.getProductsSimpleInfo();
+    }
+
+    public ProductDetailInfo findProductDetailByName(String productName) {
+        return productManagement.findProductDetailByName(productName);
     }
 
 }

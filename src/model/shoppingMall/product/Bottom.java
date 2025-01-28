@@ -1,5 +1,7 @@
 package model.shoppingMall.product;
 
+import dto.BottomDetailInfo;
+
 public class Bottom extends Clothes{
     private final int length; // 기장
     private final int waist; // 허리둘레
@@ -14,5 +16,19 @@ public class Bottom extends Clothes{
         this.rise = rise;
         this.thigh = thigh;
         this.hem = hem;
+    }
+
+    public BottomDetailInfo generateDetailInfo() {
+        return new BottomDetailInfo(
+                this.name,
+                this.size,
+                this.length,
+                this.waist,
+                this.rise,
+                this.thigh,
+                this.hem,
+                this.quantity,
+                this.price
+        );
     }
 }
