@@ -1,12 +1,16 @@
 package view;
 
 import constant.ErrorMessage;
+import dto.CartProductInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InputView {
+    private static final Pattern CART_INPUT_PATTERN = Pattern.compile("^(.+),(\\d+)$");
     private BufferedReader br;
     public InputView() {
         br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,7 +25,7 @@ public class InputView {
     }
 
     public String readBrowseProductUserInput() throws IOException {
-        System.out.println(
+        System.out.print(
                 """
                 
                 아래의 메뉴를 선택해주세요
@@ -41,6 +45,14 @@ public class InputView {
         checkEmptyInput(productName);
 
         return productName;
+    }
+
+    public CartProductInfo readCartProduct() throws IOException {
+        System.out.println("장바구니에 담을 상품명과 수량을 입력해주세요. (ex. 반팔,1)");
+        String cartProductInput = br.readLine();
+        checkEmptyInput(cartProductInput);
+
+        return handleCartProductInput(cartProductInput);
     }
 
     private void printMainPage() {
@@ -91,5 +103,18 @@ public class InputView {
         if (flag) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_BROWSE_PRODUCT_INPUT.getMessage());
         }
+    }
+
+    private CartProductInfo handleCartProductInput(String userInput) {
+        Matcher matcher = CART_INPUT_PATTERN.matcher(userInput);
+
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_CART_FORMAT.getMessage());
+        }
+
+        return new CartProductInfo(
+                matcher.group(1),
+                Integer.parseInt(matcher.group(2))
+        );
     }
 }

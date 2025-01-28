@@ -1,5 +1,6 @@
 package util;
 
+import model.shoppingMall.cart.CartManagement;
 import model.shoppingMall.history.HistoryManagement;
 import model.shoppingMall.payment.PaymentManagement;
 import model.shoppingMall.product.Bottom;
@@ -25,7 +26,8 @@ public class ProductInitializer {
                         new Bottom("Cut-off Tapered Sweatpants", 150000, 6, 'L', 109, 39, 35, 37.5, 28.5)
                 )),
                 new HistoryManagement(),
-                new PaymentManagement()
+                new PaymentManagement(),
+                new CartManagement()
         );
     }
 }

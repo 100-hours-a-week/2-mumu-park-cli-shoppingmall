@@ -1,6 +1,6 @@
 package controller;
 
-import dto.ProductDetailInfo;
+import dto.CartProductInfo;
 import dto.ProductSimpleInfo;
 import service.ShoppingService;
 import view.InputView;
@@ -65,12 +65,16 @@ public class ShoppingController {
         while (true) {
             try {
                 if (userInput.equals("1")) {
-                    String productName = inputView.readProductName();
-                    ProductDetailInfo detailInfo = shoppingService.getProductDetailInfoByName(productName);
-                    outputView.printProductDetailInfo(detailInfo);
+                    outputView.printProductDetailInfo(
+                            shoppingService.getProductDetailInfoByName(
+                                    inputView.readProductName()
+                            )
+                    );
                     handleBrowseProductInput();
                 } else {
-                    System.out.println("Todo : 장바구니 담기 구현");
+                    CartProductInfo cartProductInfo = inputView.readCartProduct();
+                    shoppingService.addProductToCart(cartProductInfo);
+                    outputView.printSuccessAddCartMessage(cartProductInfo);
                 }
                 break;
             } catch (IllegalArgumentException e) {

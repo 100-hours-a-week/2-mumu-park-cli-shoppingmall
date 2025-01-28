@@ -1,6 +1,7 @@
 package service;
 
 import constant.ErrorMessage;
+import dto.CartProductInfo;
 import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 import model.shoppingMall.ShoppingMall;
@@ -40,6 +41,10 @@ public class ShoppingService {
 
     public ProductDetailInfo getProductDetailInfoByName(String productName) {
         return shoppingMall.findProductDetailByName(productName);
+    }
 
+    public void addProductToCart(CartProductInfo cartProductInfo) {
+        // Todo : 여러개를 장바구니에 담는 기능도 추가해보기
+        shoppingMall.addCart(cartProductInfo);
     }
 }

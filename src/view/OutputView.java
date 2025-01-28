@@ -1,5 +1,6 @@
 package view;
 
+import dto.CartProductInfo;
 import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 
@@ -54,6 +55,10 @@ public class OutputView {
 
     private String formatPrice(int price) {
         return String.format("%,d원", price);
+    }
+
+    public void printSuccessAddCartMessage(CartProductInfo cartProductInfo) {
+        System.out.println("[" + cartProductInfo.name() + "] 상품 "+ cartProductInfo.purchaseQuantity() + "개가 장바구니에 추가되었습니다.");
     }
 }
 

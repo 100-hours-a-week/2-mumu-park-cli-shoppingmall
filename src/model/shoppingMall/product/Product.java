@@ -15,12 +15,16 @@ public abstract class Product {
         this.quantity = quantity;
     }
 
-    public void minusQuantity() {
+    public void minusQuantity(int purchaseQuantity) {
         // Todo : 0개일때 예외처리
-        this.quantity--;
+        this.quantity -= purchaseQuantity;
     }
 
     public String getName() {
         return this.name;
+    }
+
+    public boolean isValidPurchaseQuantity(int purchaseQuantity) {
+        return quantity >= purchaseQuantity;
     }
 }
