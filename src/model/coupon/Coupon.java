@@ -3,9 +3,9 @@ package model.coupon;
 import java.time.LocalDateTime;
 
 public class Coupon {
-    private int discountRate;
-    private LocalDateTime issueDate;
-    private LocalDateTime expireDate;
+    private final int discountRate;
+    private final LocalDateTime issueDate;
+    private final LocalDateTime expireDate;
 
     public Coupon(int discountRate, LocalDateTime issueDate) {
         this.discountRate = discountRate;
