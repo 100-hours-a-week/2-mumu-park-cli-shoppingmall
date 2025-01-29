@@ -31,11 +31,12 @@ public class InputView {
                 아래의 메뉴를 선택해주세요
                 1. 상품 상세보기
                 2. 장바구니 담기
+                3. 홈으로 돌아가기
                 """
         );
 
         String userInput = br.readLine();
-        checkValidBrowseProductInput(userInput);
+        checkValidProdutMenuInput(userInput);
         return userInput;
     }
 
@@ -89,8 +90,8 @@ public class InputView {
         }
     }
 
-    private void checkValidBrowseProductInput(String userInput) {
-        String[] validMainInputValues = {"1", "2"};
+    private void checkValidProdutMenuInput(String userInput) {
+        String[] validMainInputValues = {"1", "2", "3"};
 
         boolean flag = true;
         for (String validMainInputValue : validMainInputValues) {
@@ -116,5 +117,17 @@ public class InputView {
                 matcher.group(1),
                 Integer.parseInt(matcher.group(2))
         );
+    }
+
+    public String readCartMenuInput() throws IOException {
+        System.out.println("아래 메뉴를 선택해주세요.");
+        System.out.println("1. 결제하기");
+        System.out.println("2. 장바구니 상품 제거");
+        System.out.println("3. 홈으로 돌아가기");
+
+        String userInput = br.readLine();
+        checkValidProdutMenuInput(userInput);
+
+        return userInput;
     }
 }

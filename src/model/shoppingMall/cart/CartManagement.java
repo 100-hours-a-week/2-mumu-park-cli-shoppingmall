@@ -1,5 +1,7 @@
 package model.shoppingMall.cart;
 
+import dto.ProductSimpleInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,5 +14,9 @@ public class CartManagement {
 
     public void addCart(CartProduct cartProduct) {
         carts.add(cartProduct);
+    }
+
+    public List<ProductSimpleInfo> getCartProductsInfo() {
+        return carts.stream().map(CartProduct::toSimpleInfoDto).toList();
     }
 }

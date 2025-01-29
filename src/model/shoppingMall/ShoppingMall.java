@@ -46,4 +46,8 @@ public class ShoppingMall {
         product.minusQuantity(cartProductInfo.purchaseQuantity());
         cartManagement.addCart(new CartProduct(product, cartProductInfo.purchaseQuantity()));
     }
+
+    public List<ProductSimpleInfo> getCartProducts() {
+        return cartManagement.getCartProductsInfo();
+    }
 }

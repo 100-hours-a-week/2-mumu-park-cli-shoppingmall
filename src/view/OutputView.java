@@ -49,16 +49,33 @@ public class OutputView {
         System.out.println("가격 - " + formatPrice(detailInfo.price()));
     }
 
+
+    public void printSuccessAddCartMessage(CartProductInfo cartProductInfo) {
+        System.out.println("[" + cartProductInfo.name() + "] 상품 " + cartProductInfo.purchaseQuantity() + "개가 장바구니에 추가되었습니다.");
+    }
+
+    public void printCartProducts(List<ProductSimpleInfo> cartProducts) {
+        if (cartProducts.isEmpty()) {
+            System.out.println("장바구니가 비어있습니다. 쇼핑을 진행해보세요~!");
+            return;
+        }
+
+        System.out.println("장바구니속 상품입니다.");
+        int totalPrice = 0;
+        for (ProductSimpleInfo cartProduct : cartProducts) {
+            System.out.println("- [%s] %s사이즈 %d개 %s".formatted(cartProduct.name(), cartProduct.size(), cartProduct.quantity(), formatPrice(cartProduct.price())));
+            totalPrice += cartProduct.price();
+        }
+        System.out.println("\n총 가격 : " + formatPrice(totalPrice));
+        System.out.println("-------------------------------------------------------");
+    }
+
     private String formatProductSimpleInfo(ProductSimpleInfo product) {
         return "- [%s] %s사이즈, %s, %d개 남음 ".formatted(product.name(), product.size(), formatPrice(product.price()), product.quantity());
     }
 
     private String formatPrice(int price) {
         return String.format("%,d원", price);
-    }
-
-    public void printSuccessAddCartMessage(CartProductInfo cartProductInfo) {
-        System.out.println("[" + cartProductInfo.name() + "] 상품 "+ cartProductInfo.purchaseQuantity() + "개가 장바구니에 추가되었습니다.");
     }
 }
 

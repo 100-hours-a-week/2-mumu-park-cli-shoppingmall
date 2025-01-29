@@ -18,4 +18,9 @@ public class Clothes extends Product {
                 this.price
         );
     }
+
+    @Override
+    public Character getSize() {
+        return this.size;
+    }
 }

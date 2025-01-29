@@ -30,7 +30,17 @@ public class ShoppingController {
                 issueRandomCoupon();
                 run();
             }
-            case "3" -> System.out.println("2");
+            case "3" -> {
+                List<ProductSimpleInfo> cartProducts = getCartProducts();
+                outputView.printCartProducts(cartProducts);
+                if (cartProducts.isEmpty())  {
+                    run();
+                    return;
+                }
+
+                String menuInput = readCartMenuInput();
+                handleCartMenuInput(menuInput);
+            }
             case "4" -> {
                 showUserPoint();
                 run();
@@ -71,10 +81,13 @@ public class ShoppingController {
                             )
                     );
                     handleBrowseProductInput();
-                } else {
+                } else if (userInput.equals("2")){
                     CartProductInfo cartProductInfo = inputView.readCartProduct();
                     shoppingService.addProductToCart(cartProductInfo);
                     outputView.printSuccessAddCartMessage(cartProductInfo);
+                    browseProductProcess();
+                } else {
+                    run();
                 }
                 break;
             } catch (IllegalArgumentException e) {
@@ -108,5 +121,30 @@ public class ShoppingController {
 
     private void showUserPoint() {
         outputView.printUserPoint(shoppingService.getUserPoint());
+    }
+
+    private List<ProductSimpleInfo> getCartProducts() {
+        return shoppingService.getCartProducts();
+    }
+
+    private String readCartMenuInput() throws IOException {
+        while (true) {
+            try {
+                return inputView.readCartMenuInput();
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
+    }
+
+    private void handleCartMenuInput(String menuInput) throws IOException {
+        if (menuInput.equals("1")) {
+            // 결제하기
+        } else if (menuInput.equals("2")) {
+            // 장바구니 상품 제거
+        } else {
+            // 홈으로
+            run();
+        }
     }
 }

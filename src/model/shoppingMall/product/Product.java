@@ -1,9 +1,5 @@
 package model.shoppingMall.product;
 
-import dto.ProductSimpleInfo;
-
-import java.util.List;
-
 public abstract class Product {
     protected final String name;
     protected final int price;
@@ -22,6 +18,14 @@ public abstract class Product {
 
     public String getName() {
         return this.name;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public Character getSize() {
+        return null;
     }
 
     public boolean isValidPurchaseQuantity(int purchaseQuantity) {

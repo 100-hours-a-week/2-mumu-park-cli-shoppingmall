@@ -1,7 +1,6 @@
 package model.shoppingMall.product;
 
 import dto.TopDetailInfo;
-import model.shoppingMall.product.Clothes;
 
 public class Top extends Clothes {
     private final int length; // 기장

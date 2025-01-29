@@ -47,4 +47,8 @@ public class ShoppingService {
         // Todo : 여러개를 장바구니에 담는 기능도 추가해보기
         shoppingMall.addCart(cartProductInfo);
     }
+
+    public List<ProductSimpleInfo> getCartProducts() {
+        return shoppingMall.getCartProducts();
+    }
 }
