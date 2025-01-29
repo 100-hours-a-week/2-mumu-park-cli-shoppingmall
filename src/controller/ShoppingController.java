@@ -46,6 +46,7 @@ public class ShoppingController {
                 run();
             }
             case "5" -> System.out.println("2");
+            case "6" -> printExitMessage();
             default -> System.out.println("default");
         }
     }
@@ -146,5 +147,9 @@ public class ShoppingController {
             // 홈으로
             run();
         }
+    }
+
+    private void printExitMessage() {
+        outputView.printExitMessage();
     }
 }

@@ -77,5 +77,9 @@ public class OutputView {
     private String formatPrice(int price) {
         return String.format("%,d원", price);
     }
+
+    public void printExitMessage() {
+        System.out.println("다음에 또 방문해주세요~!");
+    }
 }
 

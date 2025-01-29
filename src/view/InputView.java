@@ -63,7 +63,8 @@ public class InputView {
         System.out.println("2. 랜덤쿠폰 발급받기");
         System.out.println("3. 장바구니 보러가기");
         System.out.println("4. 포인트 확인하기");
-        System.out.println("5. 쇼핑 그만하기");
+        System.out.println("5. 주문내역 확인하기");
+        System.out.println("6. 쇼핑 그만하기");
 
         System.out.println("메뉴중 하나를 선택해주세요. (ex. 1)");
     }
@@ -75,7 +76,7 @@ public class InputView {
     }
 
     private void checkValidMainInput(String userInput) {
-        String[] validMainInputValues = {"1", "2", "3", "4", "5"};
+        String[] validMainInputValues = {"1", "2", "3", "4", "5", "6"};
 
         boolean flag = true;
         for (String validMainInputValue : validMainInputValues) {
