@@ -38,16 +38,21 @@ public class ShoppingMall {
     public void addCart(CartProductInfo cartProductInfo) {
         Product product = productManagement.findProductByName(cartProductInfo.name());
 
-        if (!product.isValidPurchaseQuantity(cartProductInfo.purchaseQuantity())) {
+        if (!product.isValidPurchaseQuantity(cartProductInfo.purchaseOrDeleteQuantity())) {
             throw new IllegalArgumentException(ErrorMessage.OVER_PURCHASE_QUANTITY.getMessage());
         }
 
         // MinusQuantity 가 productManagement에서 행해져야 하는걸까?
-        product.minusQuantity(cartProductInfo.purchaseQuantity());
-        cartManagement.addCart(new CartProduct(product, cartProductInfo.purchaseQuantity()));
+        product.minusQuantity(cartProductInfo.purchaseOrDeleteQuantity());
+        cartManagement.addCart(new CartProduct(product, cartProductInfo.purchaseOrDeleteQuantity()));
     }
 
     public List<ProductSimpleInfo> getCartProducts() {
         return cartManagement.getCartProductsInfo();
+    }
+
+    public void deleteCartProduct(CartProductInfo deleteInfo) {
+        cartManagement.deleteProduct(deleteInfo);
+        productManagement.addProductQuantity(deleteInfo.name(), deleteInfo.purchaseOrDeleteQuantity());
     }
 }

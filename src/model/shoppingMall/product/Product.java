@@ -31,4 +31,8 @@ public abstract class Product {
     public boolean isValidPurchaseQuantity(int purchaseQuantity) {
         return quantity >= purchaseQuantity;
     }
+
+    public void addQuantity(int addQuantity) {
+        this.quantity += addQuantity;
+    }
 }

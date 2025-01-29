@@ -51,12 +51,12 @@ public class OutputView {
 
 
     public void printSuccessAddCartMessage(CartProductInfo cartProductInfo) {
-        System.out.println("[" + cartProductInfo.name() + "] 상품 " + cartProductInfo.purchaseQuantity() + "개가 장바구니에 추가되었습니다.");
+        System.out.println("[" + cartProductInfo.name() + "] 상품 " + cartProductInfo.purchaseOrDeleteQuantity() + "개가 장바구니에 추가되었습니다.");
     }
 
     public void printCartProducts(List<ProductSimpleInfo> cartProducts) {
         if (cartProducts.isEmpty()) {
-            System.out.println("장바구니가 비어있습니다. 쇼핑을 진행해보세요~!");
+            System.out.println("장바구니가 비어있습니다. 쇼핑을 진행해보세요~!\n");
             return;
         }
 
@@ -80,6 +80,12 @@ public class OutputView {
 
     public void printExitMessage() {
         System.out.println("다음에 또 방문해주세요~!");
+    }
+
+    public void printSuccessDeleteCartProduct(CartProductInfo deleteInfo) {
+        System.out.println("-------------------------------------------------------");
+        System.out.println("[%s] %d개가 정상적으로 삭제되었습니다.".formatted(deleteInfo.name(), deleteInfo.purchaseOrDeleteQuantity()));
+        System.out.println("-------------------------------------------------------");
     }
 }
 

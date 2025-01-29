@@ -25,30 +25,38 @@ public class ShoppingController {
         String userMainInput = readUserMainInput();
 
         switch (userMainInput) {
-            case "1" -> browseProductProcess();
+            case "1" -> {
+                browseProductProcess();
+            }
             case "2" -> {
                 issueRandomCoupon();
                 run();
             }
             case "3" -> {
-                List<ProductSimpleInfo> cartProducts = getCartProducts();
-                outputView.printCartProducts(cartProducts);
-                if (cartProducts.isEmpty())  {
-                    run();
-                    return;
-                }
-
-                String menuInput = readCartMenuInput();
-                handleCartMenuInput(menuInput);
+                cartProcess();
             }
             case "4" -> {
                 showUserPoint();
                 run();
             }
             case "5" -> System.out.println("2");
-            case "6" -> printExitMessage();
+            case "6" -> {
+                printExitMessage();
+            }
             default -> System.out.println("default");
         }
+    }
+
+    private void cartProcess() throws IOException {
+        List<ProductSimpleInfo> cartProducts = getCartProducts();
+        outputView.printCartProducts(cartProducts);
+        if (cartProducts.isEmpty())  {
+            run();
+            return;
+        }
+
+        String menuInput = readCartMenuInput();
+        handleCartMenuInput(menuInput);
     }
 
     private void browseProductProcess() throws IOException {
@@ -143,9 +151,34 @@ public class ShoppingController {
             // 결제하기
         } else if (menuInput.equals("2")) {
             // 장바구니 상품 제거
+            deleteCartProductProcess();
         } else {
             // 홈으로
             run();
+        }
+    }
+
+    private boolean deleteCartProductProcess() throws IOException {
+        while(true) {
+            try {
+                CartProductInfo deleteInfo = readDeleteProductFromCart();
+                shoppingService.deleteCartProduct(deleteInfo);
+                outputView.printSuccessDeleteCartProduct(deleteInfo);
+                cartProcess();
+                return true;
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
+    }
+
+    private CartProductInfo readDeleteProductFromCart() throws IOException {
+        while(true) {
+            try {
+                return inputView.readDeleteProductFromCart();
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
         }
     }
 

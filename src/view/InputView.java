@@ -131,4 +131,10 @@ public class InputView {
 
         return userInput;
     }
+
+    public CartProductInfo readDeleteProductFromCart() throws IOException {
+        System.out.println("제거하고 싶은 상품의 상품명과 수량을 입력해주세요. (ex. 연청바지,1)");
+        String userInput = br.readLine();
+        return handleCartProductInput(userInput);
+    }
 }

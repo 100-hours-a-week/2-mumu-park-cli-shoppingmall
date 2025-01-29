@@ -54,4 +54,9 @@ public class ProductManagement {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.NOT_EXIST_PRODUCT.getMessage()));
     }
+
+    public void addProductQuantity(String productName, int addQuantity) {
+        Product product = findProductByName(productName);
+        product.addQuantity(addQuantity);
+    }
 }

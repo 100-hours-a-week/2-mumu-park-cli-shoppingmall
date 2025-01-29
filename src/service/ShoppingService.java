@@ -51,4 +51,8 @@ public class ShoppingService {
     public List<ProductSimpleInfo> getCartProducts() {
         return shoppingMall.getCartProducts();
     }
+
+    public void deleteCartProduct(CartProductInfo deleteInfo) {
+        shoppingMall.deleteCartProduct(deleteInfo);
+    }
 }
