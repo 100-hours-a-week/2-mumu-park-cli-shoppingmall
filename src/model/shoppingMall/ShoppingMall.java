@@ -1,9 +1,7 @@
 package model.shoppingMall;
 
 import constant.ErrorMessage;
-import dto.CartProductInfo;
-import dto.ProductDetailInfo;
-import dto.ProductSimpleInfo;
+import dto.*;
 import model.shoppingMall.cart.CartManagement;
 import model.shoppingMall.cart.CartProduct;
 import model.shoppingMall.history.HistoryManagement;
@@ -11,6 +9,7 @@ import model.shoppingMall.payment.PaymentManagement;
 import model.shoppingMall.product.Product;
 import model.shoppingMall.product.ProductManagement;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -54,5 +53,13 @@ public class ShoppingMall {
     public void deleteCartProduct(CartProductInfo deleteInfo) {
         cartManagement.deleteProduct(deleteInfo);
         productManagement.addProductQuantity(deleteInfo.name(), deleteInfo.purchaseOrDeleteQuantity());
+    }
+
+    public ChangeAndPoint paymentProgress(LocalDateTime now, PaymentInfo paymentInfo) {
+        // Todo : 1. 잔돈 및 적립 포인트 계산
+        ChangeAndPoint changeAndPoint = paymentManagement.calculateChangeAndRewardPoint(paymentInfo);
+        // 2. History에 저장하기
+        historyManagement.saveOrder(now, paymentInfo, changeAndPoint);
+        return changeAndPoint;
     }
 }

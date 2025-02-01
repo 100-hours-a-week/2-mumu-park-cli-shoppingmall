@@ -1,8 +1,11 @@
 package controller;
 
 import dto.CartProductInfo;
+import dto.DiscountInfo;
+import dto.PaymentInfo;
 import dto.ProductSimpleInfo;
 import service.ShoppingService;
+import validator.PaymentValidator;
 import view.InputView;
 import view.OutputView;
 
@@ -40,10 +43,9 @@ public class ShoppingController {
                 run();
             }
             case "5" -> System.out.println("2");
-            case "6" -> {
+            default -> {
                 printExitMessage();
             }
-            default -> System.out.println("default");
         }
     }
 
@@ -56,7 +58,7 @@ public class ShoppingController {
         }
 
         String menuInput = readCartMenuInput();
-        handleCartMenuInput(menuInput);
+        handleCartMenuInput(menuInput, cartProducts);
     }
 
     private void browseProductProcess() throws IOException {
@@ -80,6 +82,7 @@ public class ShoppingController {
         }
     }
 
+    // Todo : 메서드 네이밍 다시하기
     private void processBrowseProductUserInput(String userInput) throws IOException {
         while (true) {
             try {
@@ -146,15 +149,59 @@ public class ShoppingController {
         }
     }
 
-    private void handleCartMenuInput(String menuInput) throws IOException {
+    private void handleCartMenuInput(String menuInput, List<ProductSimpleInfo> cartProducts) throws IOException {
         if (menuInput.equals("1")) {
             // 결제하기
+            DiscountInfo userDiscountInfo = shoppingService.getUserDiscountInfo();
+            paymentProcess(cartProducts, userDiscountInfo);
         } else if (menuInput.equals("2")) {
             // 장바구니 상품 제거
             deleteCartProductProcess();
         } else {
             // 홈으로
             run();
+        }
+    }
+
+    private void paymentProcess(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo) throws IOException {
+        // Todo : 메서드 분리 필요
+        outputView.printPaymentInfos(cartProducts, userDiscountInfo);
+
+        while(true) {
+            try {
+                String menuInput = inputView.readPaymentMenuInput();
+
+                switch (menuInput) {
+                    case "1" -> {
+                        userDiscountInfo.applyCoupon();
+                        paymentProcess(cartProducts, userDiscountInfo);
+                        return;
+                    }
+                    case "2" -> {
+                        userDiscountInfo.usePoint();
+                        paymentProcess(cartProducts, userDiscountInfo);
+                        return;
+                    }
+                    default -> {
+                        int finalPrice = userDiscountInfo.getFinalPrice(cartProducts);
+                        outputView.printFinalPrice(finalPrice);
+                        int payAmount = readPayAmount(finalPrice);
+
+                        shoppingService.paymentProgress(
+                                new PaymentInfo(
+                                        cartProducts,
+                                        userDiscountInfo.getCouponRate(),
+                                        userDiscountInfo.getAppliedPoint(),
+                                        finalPrice,
+                                        payAmount
+                                )
+                        );
+                        return;
+                    }
+                }
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
         }
     }
 
@@ -176,6 +223,18 @@ public class ShoppingController {
         while(true) {
             try {
                 return inputView.readDeleteProductFromCart();
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
+    }
+
+    private int readPayAmount(int finalPrice) throws IOException {
+        while(true) {
+            try {
+                int payAmount = inputView.readPayAmount();
+                PaymentValidator.checkValidPayAmount(finalPrice, payAmount);
+                return payAmount;
             } catch (IllegalArgumentException e) {
                 outputView.printExceptionMessage(e);
             }

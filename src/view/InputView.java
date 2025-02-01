@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 public class InputView {
     private static final Pattern CART_INPUT_PATTERN = Pattern.compile("^(.+),(\\d+)$");
+    private static final Pattern VALID_PAY_PATTERN = Pattern.compile(("([1-9]\\d*)$"));
     private BufferedReader br;
     public InputView() {
         br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,7 +37,7 @@ public class InputView {
         );
 
         String userInput = br.readLine();
-        checkValidProdutMenuInput(userInput);
+        checkValidMenuInput(userInput);
         return userInput;
     }
 
@@ -91,7 +92,7 @@ public class InputView {
         }
     }
 
-    private void checkValidProdutMenuInput(String userInput) {
+    private void checkValidMenuInput(String userInput) {
         String[] validMainInputValues = {"1", "2", "3"};
 
         boolean flag = true;
@@ -103,7 +104,7 @@ public class InputView {
         }
 
         if (flag) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_BROWSE_PRODUCT_INPUT.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.INVALID_MENU_INPUT.getMessage());
         }
     }
 
@@ -127,7 +128,7 @@ public class InputView {
         System.out.println("3. 홈으로 돌아가기");
 
         String userInput = br.readLine();
-        checkValidProdutMenuInput(userInput);
+        checkValidMenuInput(userInput);
 
         return userInput;
     }
@@ -137,4 +138,33 @@ public class InputView {
         String userInput = br.readLine();
         return handleCartProductInput(userInput);
     }
+
+    public String readPaymentMenuInput() throws IOException {
+        System.out.println("아래 메뉴를 선택해주세요.");
+        System.out.println("1. 쿠폰 사용하기");
+        System.out.println("2. 포인트 사용하기");
+        System.out.println("3. 결제하기");
+
+        String userInput = br.readLine();
+        checkValidMenuInput(userInput);
+
+        return userInput;
+    }
+
+    public int readPayAmount() throws IOException, NumberFormatException {
+        System.out.println("돈을 지불해주세요.");
+        String userInput = br.readLine();
+        checkValidPay(userInput);
+
+        return Integer.parseInt(userInput);
+    }
+
+    private void checkValidPay(String pay) {
+        Matcher matcher = VALID_PAY_PATTERN.matcher(pay);
+
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_PAY_FORMAT.getMessage());
+        }
+    }
+
 }

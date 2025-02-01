@@ -1,9 +1,7 @@
 package service;
 
 import constant.ErrorMessage;
-import dto.CartProductInfo;
-import dto.ProductDetailInfo;
-import dto.ProductSimpleInfo;
+import dto.*;
 import model.shoppingMall.ShoppingMall;
 import model.user.User;
 import util.CouponGenerator;
@@ -27,7 +25,7 @@ public class ShoppingService {
             throw new IllegalArgumentException(ErrorMessage.ALREADY_EXIST_COUPON.getMessage());
         }
 
-        user.setCoupon(CouponGenerator.issueRandomCoupon());
+        user.receiveCoupon(CouponGenerator.issueRandomCoupon());
         return user.getCouponDiscountRate();
     }
 
@@ -54,5 +52,13 @@ public class ShoppingService {
 
     public void deleteCartProduct(CartProductInfo deleteInfo) {
         shoppingMall.deleteCartProduct(deleteInfo);
+    }
+
+    public DiscountInfo getUserDiscountInfo() {
+        return user.generateDiscountInfo(LocalDateTime.now());
+    }
+
+    public ChangeAndPoint paymentProgress(PaymentInfo paymentInfo) {
+        return shoppingMall.paymentProgress(LocalDateTime.now(), paymentInfo);
     }
 }

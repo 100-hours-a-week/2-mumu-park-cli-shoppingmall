@@ -1,6 +1,7 @@
 package view;
 
 import dto.CartProductInfo;
+import dto.DiscountInfo;
 import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 
@@ -49,7 +50,6 @@ public class OutputView {
         System.out.println("가격 - " + formatPrice(detailInfo.price()));
     }
 
-
     public void printSuccessAddCartMessage(CartProductInfo cartProductInfo) {
         System.out.println("[" + cartProductInfo.name() + "] 상품 " + cartProductInfo.purchaseOrDeleteQuantity() + "개가 장바구니에 추가되었습니다.");
     }
@@ -86,6 +86,36 @@ public class OutputView {
         System.out.println("-------------------------------------------------------");
         System.out.println("[%s] %d개가 정상적으로 삭제되었습니다.".formatted(deleteInfo.name(), deleteInfo.purchaseOrDeleteQuantity()));
         System.out.println("-------------------------------------------------------");
+    }
+
+    public void printPaymentInfos(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo) {
+        System.out.println("-------------------------------------------------------");
+        System.out.println("결제하실 상품 리스트 입니다.");
+        System.out.println("-------------------------------------------------------");
+
+        int totalPrice = 0;
+        for (ProductSimpleInfo cartProduct : cartProducts) {
+            System.out.println("- [%s] %s사이즈 %d개 %s".formatted(cartProduct.name(), cartProduct.size(), cartProduct.quantity(), formatPrice(cartProduct.price())));
+            totalPrice += cartProduct.price();
+        }
+
+        totalPrice -= userDiscountInfo.calculateCouponAppliedPrice(totalPrice);
+        totalPrice -= userDiscountInfo.getAppliedPoint();
+        System.out.println("%n쿠폰 할인 금액 : %s".formatted(formatPrice(userDiscountInfo.calculateCouponAppliedPrice(totalPrice))));
+        System.out.println("포인트 적용 : %s".formatted(formatPrice(userDiscountInfo.getAppliedPoint())));
+        System.out.println("총 가격 : %s".formatted(formatPrice(totalPrice)));
+        System.out.println("-------------------------------------------------------");
+
+        if (userDiscountInfo.getCouponRate() == 0 || userDiscountInfo.isCouponUsed()) {
+            System.out.println("사용가능한 쿠폰 : 쿠폰 없음");
+        } else {
+            System.out.println("사용가능한 쿠폰 : %d%% 쿠폰".formatted(userDiscountInfo.getCouponRate()));
+        }
+        System.out.println("사용가능한 포인트 : %s".formatted(formatPrice(userDiscountInfo.getTotalPoint())));
+    }
+
+    public void printFinalPrice(int finalPrice) {
+        System.out.println("총 가격은 %s입니다.".formatted(formatPrice(finalPrice)));
     }
 }
 

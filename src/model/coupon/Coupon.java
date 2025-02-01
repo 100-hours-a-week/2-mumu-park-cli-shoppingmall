@@ -14,11 +14,7 @@ public class Coupon {
     }
 
     public boolean isExpired(LocalDateTime now) {
-        if (now.isAfter(issueDate) && now.isBefore(expireDate)) {
-            return true;
-        }
-
-        return false;
+        return now.isAfter(expireDate);
     }
 
     public int getDiscountRate() {

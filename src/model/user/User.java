@@ -1,5 +1,6 @@
 package model.user;
 
+import dto.DiscountInfo;
 import model.coupon.Coupon;
 
 import java.time.LocalDateTime;
@@ -14,14 +15,10 @@ public class User {
     }
 
     public boolean hasCoupon(LocalDateTime now) {
-        if (coupon != null && coupon.isExpired(now)) {
-            return true;
-        }
-
-        return false;
+        return coupon != null && !coupon.isExpired(now);
     }
 
-    public void setCoupon(Coupon newCoupon) {
+    public void receiveCoupon(Coupon newCoupon) {
         coupon = newCoupon;
     }
 
@@ -31,6 +28,18 @@ public class User {
 
     public int getPoint() {
         return point;
+    }
+
+    public DiscountInfo generateDiscountInfo(LocalDateTime now) {
+        int discountRate = hasCoupon(now)
+                ?
+                coupon.getDiscountRate()
+                : 0;
+
+        return new DiscountInfo(
+                discountRate,
+                point
+        );
     }
 
     public void plusPoint(int accumulatedPoint) {
