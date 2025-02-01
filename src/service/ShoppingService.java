@@ -59,6 +59,10 @@ public class ShoppingService {
     }
 
     public ChangeAndPoint paymentProgress(PaymentInfo paymentInfo) {
-        return shoppingMall.paymentProgress(LocalDateTime.now(), paymentInfo);
+        System.out.println("paymentInfo = " + paymentInfo.couponRate());
+        ChangeAndPoint changeAndPoint = shoppingMall.paymentProgress(LocalDateTime.now(), paymentInfo);
+        user.payProcess(paymentInfo, changeAndPoint.rewardPoint());
+
+        return changeAndPoint;
     }
 }

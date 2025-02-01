@@ -42,4 +42,8 @@ public class CartManagement {
 
         throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_PRODUCT_IN_CART.getMessage());
     }
+
+    public void deleteAllCartProduct() {
+        carts.clear();
+    }
 }

@@ -167,4 +167,18 @@ public class InputView {
         }
     }
 
+    private void checkAfterPayMenuInput(String userInput) {
+        if (!(userInput.equals("y") || userInput.equals("n"))) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_AFTER_PAY_MENU_INPUT.getMessage());
+        }
+    }
+
+    public String readAfterPayMenu() throws IOException {
+        System.out.println("구매 감사합니다. 계속 쇼핑하시겠어요? (y or n)");
+
+        String userInput = br.readLine();
+        checkAfterPayMenuInput(userInput);
+
+        return userInput;
+    }
 }

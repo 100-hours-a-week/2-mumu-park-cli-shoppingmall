@@ -1,9 +1,6 @@
 package controller;
 
-import dto.CartProductInfo;
-import dto.DiscountInfo;
-import dto.PaymentInfo;
-import dto.ProductSimpleInfo;
+import dto.*;
 import service.ShoppingService;
 import validator.PaymentValidator;
 import view.InputView;
@@ -57,8 +54,7 @@ public class ShoppingController {
             return;
         }
 
-        String menuInput = readCartMenuInput();
-        handleCartMenuInput(menuInput, cartProducts);
+        handleCartMenuInput(readCartMenuInput(), cartProducts);
     }
 
     private void browseProductProcess() throws IOException {
@@ -187,15 +183,26 @@ public class ShoppingController {
                         outputView.printFinalPrice(finalPrice);
                         int payAmount = readPayAmount(finalPrice);
 
-                        shoppingService.paymentProgress(
+                        System.out.println("userDiscountInfo.isCouponUsed() = " + userDiscountInfo.isCouponUsed());
+                        ChangeAndPoint changeAndPoint = shoppingService.paymentProgress(
                                 new PaymentInfo(
                                         cartProducts,
-                                        userDiscountInfo.getCouponRate(),
+                                        userDiscountInfo.isCouponUsed() ? userDiscountInfo.getCouponRate() : 0,
                                         userDiscountInfo.getAppliedPoint(),
                                         finalPrice,
                                         payAmount
                                 )
                         );
+
+                        outputView.printPaymentResult(payAmount, changeAndPoint);
+
+                        String userChoice = readAfterPayMenu();
+                        if (userChoice.equals("y")) {
+                            run();
+                            return;
+                        }
+
+                        printExitMessage();
                         return;
                     }
                 }
@@ -235,6 +242,16 @@ public class ShoppingController {
                 int payAmount = inputView.readPayAmount();
                 PaymentValidator.checkValidPayAmount(finalPrice, payAmount);
                 return payAmount;
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
+    }
+
+    private String readAfterPayMenu() throws IOException {
+        while(true) {
+            try {
+                return inputView.readAfterPayMenu();
             } catch (IllegalArgumentException e) {
                 outputView.printExceptionMessage(e);
             }

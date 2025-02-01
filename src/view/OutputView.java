@@ -1,9 +1,6 @@
 package view;
 
-import dto.CartProductInfo;
-import dto.DiscountInfo;
-import dto.ProductDetailInfo;
-import dto.ProductSimpleInfo;
+import dto.*;
 
 import java.util.List;
 import java.util.Map;
@@ -116,6 +113,12 @@ public class OutputView {
 
     public void printFinalPrice(int finalPrice) {
         System.out.println("총 가격은 %s입니다.".formatted(formatPrice(finalPrice)));
+    }
+
+    public void printPaymentResult(int payAmount, ChangeAndPoint changeAndPoint) {
+        System.out.println("지불한 금액 : %s".formatted(formatPrice(payAmount)));
+        System.out.println("잔돈 : %s".formatted(formatPrice(changeAndPoint.change())));
+        System.out.println("적립 포인트 : %s".formatted(formatPrice(changeAndPoint.rewardPoint())));
     }
 }
 

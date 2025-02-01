@@ -60,6 +60,7 @@ public class ShoppingMall {
         ChangeAndPoint changeAndPoint = paymentManagement.calculateChangeAndRewardPoint(paymentInfo);
         // 2. History에 저장하기
         historyManagement.saveOrder(now, paymentInfo, changeAndPoint);
+        cartManagement.deleteAllCartProduct();
         return changeAndPoint;
     }
 }

@@ -1,6 +1,7 @@
 package model.user;
 
 import dto.DiscountInfo;
+import dto.PaymentInfo;
 import model.coupon.Coupon;
 
 import java.time.LocalDateTime;
@@ -42,7 +43,20 @@ public class User {
         );
     }
 
-    public void plusPoint(int accumulatedPoint) {
-        this.point += accumulatedPoint;
+    public void payProcess(PaymentInfo paymentInfo, int rewardPoint) {
+        plusPoint(rewardPoint);
+        useCoupon(paymentInfo.couponRate());
+    }
+
+    private void plusPoint(int rewardPoint) {
+        this.point += rewardPoint;
+    }
+
+    private void useCoupon(int couponRate) {
+        if (couponRate == 0) {
+            return;
+        }
+
+        this.coupon = null;
     }
 }
