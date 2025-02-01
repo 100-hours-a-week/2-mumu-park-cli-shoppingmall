@@ -63,4 +63,8 @@ public class ShoppingMall {
         cartManagement.deleteAllCartProduct();
         return changeAndPoint;
     }
+
+    public List<OrderHistory> getOrderHistory() {
+        return historyManagement.getOrderHistory();
+    }
 }

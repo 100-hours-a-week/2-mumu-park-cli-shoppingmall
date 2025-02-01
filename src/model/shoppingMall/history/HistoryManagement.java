@@ -1,6 +1,7 @@
 package model.shoppingMall.history;
 
 import dto.ChangeAndPoint;
+import dto.OrderHistory;
 import dto.PaymentInfo;
 
 import java.time.LocalDateTime;
@@ -23,5 +24,11 @@ public class HistoryManagement {
                         changeAndPoint.change(), changeAndPoint.rewardPoint()
                 )
         );
+    }
+
+    public List<OrderHistory> getOrderHistory() {
+        return histories.stream()
+                .map(ShoppingHistory::toOrderHistory)
+                .toList();
     }
 }

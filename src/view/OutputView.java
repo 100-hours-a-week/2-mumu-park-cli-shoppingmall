@@ -4,6 +4,7 @@ import dto.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class OutputView {
     private static final String TOP = "TOP";
@@ -124,6 +125,34 @@ public class OutputView {
         System.out.println("%n지불한 금액 : %s".formatted(formatPrice(payAmount)));
         System.out.println("잔돈 : %s".formatted(formatPrice(changeAndPoint.change())));
         System.out.println("적립 포인트 : %s".formatted(formatPrice(changeAndPoint.rewardPoint())));
+    }
+
+    public void printUserOrderHistory(List<OrderHistory> userOrderHistory) {
+        System.out.println("======== 주문내역 ========");
+        String result = userOrderHistory.stream()
+                .map(orderHistory -> """
+            주문일시 : %s
+            주문 상품 : %s
+            적용된 쿠폰 : %s%% 쿠폰
+            사용 포인트 : %s 포인트
+            총 금액 : %s
+            지불 금액 : %s
+            잔돈 : %s
+            적립 포인트 : %s 포인트
+            """.formatted(
+                                orderHistory.orderDate(),
+                                orderHistory.orderProductInfo(),
+                                orderHistory.couponRate() == 0 ? "적용된 쿠폰 없음" : orderHistory.couponRate(),
+                                orderHistory.usedPoint(),
+                                formatPrice(orderHistory.totalPrice()),
+                                formatPrice(orderHistory.payAmount()),
+                                formatPrice(orderHistory.change()),
+                                orderHistory.rewardPoint()
+                        )
+                )
+                .collect(Collectors.joining("\n-------------------------------------------------------\n"));
+
+        System.out.println(result);
     }
 }
 

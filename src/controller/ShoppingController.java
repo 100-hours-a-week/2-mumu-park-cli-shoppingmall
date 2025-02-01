@@ -39,11 +39,20 @@ public class ShoppingController {
                 showUserPoint();
                 run();
             }
-            case "5" -> System.out.println("2");
+            case "5" -> {
+                // Todo : 주문목록 조회 기능
+                showUserOrderHistory();
+            }
             default -> {
                 printExitMessage();
             }
         }
+    }
+
+    private void showUserOrderHistory() throws IOException {
+        List<OrderHistory> userOrderHistory = shoppingService.getUserOrderHistory();
+        outputView.printUserOrderHistory(userOrderHistory);
+        run();
     }
 
     private void cartProcess() throws IOException {

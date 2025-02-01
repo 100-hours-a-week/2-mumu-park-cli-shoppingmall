@@ -64,4 +64,8 @@ public class ShoppingService {
 
         return changeAndPoint;
     }
+
+    public List<OrderHistory> getUserOrderHistory() {
+        return shoppingMall.getOrderHistory();
+    }
 }
