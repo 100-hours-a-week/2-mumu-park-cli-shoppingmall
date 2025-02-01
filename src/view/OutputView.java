@@ -68,6 +68,9 @@ public class OutputView {
     }
 
     private String formatProductSimpleInfo(ProductSimpleInfo product) {
+        if (product.quantity() == 0) {
+            return "- [%s] %s사이즈, %s, 품절 ".formatted(product.name(), product.size(), formatPrice(product.price()));
+        }
         return "- [%s] %s사이즈, %s, %d개 남음 ".formatted(product.name(), product.size(), formatPrice(product.price()), product.quantity());
     }
 
@@ -118,7 +121,7 @@ public class OutputView {
     }
 
     public void printPaymentResult(int payAmount, ChangeAndPoint changeAndPoint) {
-        System.out.println("지불한 금액 : %s".formatted(formatPrice(payAmount)));
+        System.out.println("%n지불한 금액 : %s".formatted(formatPrice(payAmount)));
         System.out.println("잔돈 : %s".formatted(formatPrice(changeAndPoint.change())));
         System.out.println("적립 포인트 : %s".formatted(formatPrice(changeAndPoint.rewardPoint())));
     }

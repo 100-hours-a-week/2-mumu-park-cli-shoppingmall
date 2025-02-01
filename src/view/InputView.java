@@ -174,7 +174,7 @@ public class InputView {
     }
 
     public String readAfterPayMenu() throws IOException {
-        System.out.println("구매 감사합니다. 계속 쇼핑하시겠어요? (y or n)");
+        System.out.println("\n구매 감사합니다. 계속 쇼핑하시겠어요? (y or n)");
 
         String userInput = br.readLine();
         checkAfterPayMenuInput(userInput);
