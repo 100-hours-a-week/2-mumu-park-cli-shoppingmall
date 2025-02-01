@@ -12,7 +12,7 @@ public class User {
 
     public User() {
         this.coupon = null;
-        this.point = 0;
+        this.point = 1000;
     }
 
     public boolean hasCoupon(LocalDateTime now) {

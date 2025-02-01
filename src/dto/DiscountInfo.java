@@ -35,8 +35,9 @@ public class DiscountInfo {
         if (totalPoint == 0) {
             throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_POINT.getMessage());
         }
-        this.totalPoint -= appliedPoint;
-        this.appliedPoint += appliedPoint;
+
+        this.appliedPoint += totalPoint;
+        this.totalPoint = 0;
     }
 
     public int getFinalPrice(List<ProductSimpleInfo> products) {
