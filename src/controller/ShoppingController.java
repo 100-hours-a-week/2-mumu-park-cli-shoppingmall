@@ -183,7 +183,6 @@ public class ShoppingController {
                         outputView.printFinalPrice(finalPrice);
                         int payAmount = readPayAmount(finalPrice);
 
-                        System.out.println("userDiscountInfo.isCouponUsed() = " + userDiscountInfo.isCouponUsed());
                         ChangeAndPoint changeAndPoint = shoppingService.paymentProgress(
                                 new PaymentInfo(
                                         cartProducts,

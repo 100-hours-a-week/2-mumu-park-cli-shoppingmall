@@ -28,7 +28,7 @@ public class DiscountInfo {
     public int calculateCouponAppliedPrice(int totalPrice) {
         if (!isCouponUsed) return 0;
 
-        return totalPrice * couponRate / 100;
+        return (int) Math.round(totalPrice * (couponRate / 100.0));
     }
 
     public void usePoint() {

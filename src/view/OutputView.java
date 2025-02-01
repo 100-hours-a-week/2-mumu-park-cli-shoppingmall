@@ -96,10 +96,12 @@ public class OutputView {
             totalPrice += cartProduct.price();
         }
 
-        totalPrice -= userDiscountInfo.calculateCouponAppliedPrice(totalPrice);
-        totalPrice -= userDiscountInfo.getAppliedPoint();
         System.out.println("%n쿠폰 할인 금액 : %s".formatted(formatPrice(userDiscountInfo.calculateCouponAppliedPrice(totalPrice))));
         System.out.println("포인트 적용 : %s".formatted(formatPrice(userDiscountInfo.getAppliedPoint())));
+
+        totalPrice -= userDiscountInfo.calculateCouponAppliedPrice(totalPrice);
+        totalPrice -= userDiscountInfo.getAppliedPoint();
+
         System.out.println("총 가격 : %s".formatted(formatPrice(totalPrice)));
         System.out.println("-------------------------------------------------------");
 
