@@ -31,13 +31,20 @@ public class DiscountInfo {
         return (int) Math.round(totalPrice * (couponRate / 100.0));
     }
 
-    public void usePoint() {
+    public void usePoint(List<ProductSimpleInfo> products) {
         if (totalPoint == 0) {
             throw new IllegalArgumentException(ErrorMessage.POINT_DOES_NOT_EXIST.getMessage());
         }
 
-        this.appliedPoint += totalPoint;
-        this.totalPoint = 0;
+        int finalPrice = getFinalPrice(products);
+        if (finalPrice < totalPoint) {
+            this.totalPoint = totalPoint - finalPrice;
+            this.appliedPoint = appliedPoint + finalPrice;
+        } else {
+            this.appliedPoint += totalPoint;
+            this.totalPoint = 0;
+        }
+
     }
 
     public int getFinalPrice(List<ProductSimpleInfo> products) {

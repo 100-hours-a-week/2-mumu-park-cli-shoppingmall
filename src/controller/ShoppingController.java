@@ -155,7 +155,7 @@ public class ShoppingController {
                         return;
                     }
                     case "2" -> {
-                        userDiscountInfo.usePoint();
+                        userDiscountInfo.usePoint(cartProducts);
                         handlePaymentUserInput(cartProducts, userDiscountInfo);
                         return;
                     }
