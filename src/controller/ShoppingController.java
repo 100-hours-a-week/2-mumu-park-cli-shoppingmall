@@ -45,7 +45,7 @@ public class ShoppingController {
 
     private void browseProductProcess() throws IOException {
         outputView.printProductSimpleInfo(shoppingService.getProducts());
-        handleBrowseProductInput();
+        executeBrowseMenuByUserInput();
     }
 
     private void issueRandomCoupon() throws IOException {
@@ -80,23 +80,10 @@ public class ShoppingController {
         run();
     }
 
-    private void handleBrowseProductInput() throws IOException {
-        executeBrowseMenuByUserInput(readBrowseProductUserInput());
-    }
-
-    private String readBrowseProductUserInput() throws IOException {
+    private void executeBrowseMenuByUserInput() throws IOException {
         while (true) {
             try {
-                return inputView.readBrowseProductUserInput();
-            } catch (IllegalArgumentException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
-    }
-
-    private void executeBrowseMenuByUserInput(String userInput) throws IOException {
-        while (true) {
-            try {
+                String userInput = readBrowseProductUserInput();
                 switch (userInput) {
                     case "1" -> showProductDetailProcess();
                     case "2" -> addToCartProcess();
@@ -109,11 +96,21 @@ public class ShoppingController {
         }
     }
 
+    private String readBrowseProductUserInput() throws IOException {
+        while (true) {
+            try {
+                return inputView.readBrowseProductUserInput();
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
+    }
+
     private void showProductDetailProcess() throws IOException {
         String productName = inputView.readProductName();
         ProductDetailInfo productDetail = shoppingService.getProductDetailInfoByName(productName);
         outputView.printProductDetailInfo(productDetail);
-        handleBrowseProductInput();
+        executeBrowseMenuByUserInput();
     }
 
     private String readCartMenuInput() throws IOException {
