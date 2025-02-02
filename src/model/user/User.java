@@ -32,13 +32,8 @@ public class User {
     }
 
     public DiscountInfo generateDiscountInfo(LocalDateTime now) {
-        int discountRate = hasCoupon(now)
-                ?
-                coupon.getDiscountRate()
-                : 0;
-
         return new DiscountInfo(
-                discountRate,
+                hasCoupon(now) ? coupon.getDiscountRate() : 0,
                 point
         );
     }

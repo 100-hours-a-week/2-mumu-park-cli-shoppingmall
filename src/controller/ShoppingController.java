@@ -151,7 +151,6 @@ public class ShoppingController {
         while(true) {
             try {
                 String menuInput = inputView.readPaymentMenuInput();
-
                 switch (menuInput) {
                     case "1" -> {
                         userDiscountInfo.applyCoupon();
@@ -163,7 +162,10 @@ public class ShoppingController {
                         handlePaymentUserInput(cartProducts, userDiscountInfo);
                         return;
                     }
-                    default -> paymentProcess(cartProducts, userDiscountInfo);
+                    default -> {
+                        paymentProcess(cartProducts, userDiscountInfo);
+                        return;
+                    }
                 }
             } catch (IllegalArgumentException e) {
                 outputView.printExceptionMessage(e);
