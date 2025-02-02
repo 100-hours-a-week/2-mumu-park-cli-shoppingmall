@@ -1,4 +1,4 @@
-package model.shoppingMall.history;
+package model.shoppingmall.history;
 
 import dto.OrderHistory;
 import dto.ProductSimpleInfo;

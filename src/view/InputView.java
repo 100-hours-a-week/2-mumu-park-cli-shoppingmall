@@ -6,15 +6,20 @@ import dto.CartProductInfo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputView {
     private static final Pattern CART_INPUT_PATTERN = Pattern.compile("^(.+),(\\d+)$");
     private static final Pattern VALID_PAY_PATTERN = Pattern.compile(("([1-9]\\d*)$"));
-    private BufferedReader br;
+    private static final Set<String> VALID_MENU_INPUT_VALUES = Set.of("1", "2", "3");
+    private static final Set<String> VALID_MAIN_MENU_INPUT_VALUES = Set.of("1", "2", "3", "4", "5", "6");
+    private static final String YES = "y";
+    private static final String NO = "n";
+    private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
     public InputView() {
-        br = new BufferedReader(new InputStreamReader(System.in));
     }
 
     public String readMainInput() throws IOException {
@@ -28,12 +33,12 @@ public class InputView {
     public String readBrowseProductUserInput() throws IOException {
         System.out.print(
                 """
-                
-                아래의 메뉴를 선택해주세요
-                1. 상품 상세보기
-                2. 장바구니 담기
-                3. 홈으로 돌아가기
-                """
+                                        
+                        아래의 메뉴를 선택해주세요
+                        1. 상품 상세보기
+                        2. 장바구니 담기
+                        3. 홈으로 돌아가기
+                        """
         );
 
         String userInput = br.readLine();
@@ -55,70 +60,6 @@ public class InputView {
         checkEmptyInput(cartProductInput);
 
         return handleCartProductInput(cartProductInput);
-    }
-
-    private void printMainPage() {
-        System.out.println("안녕하세요. 무무 쇼핑몰 입니다.");
-        System.out.println();
-        System.out.println("1. 상품 구경하기");
-        System.out.println("2. 랜덤쿠폰 발급받기");
-        System.out.println("3. 장바구니 보러가기");
-        System.out.println("4. 포인트 확인하기");
-        System.out.println("5. 주문내역 확인하기");
-        System.out.println("6. 쇼핑 그만하기");
-
-        System.out.println("메뉴중 하나를 선택해주세요. (ex. 1)");
-    }
-
-    private void checkEmptyInput(String userInput) {
-        if (userInput == null || userInput.isEmpty()) {
-            throw new IllegalArgumentException(ErrorMessage.EMPTY_INPUT.getMessage());
-        }
-    }
-
-    private void checkValidMainInput(String userInput) {
-        String[] validMainInputValues = {"1", "2", "3", "4", "5", "6"};
-
-        boolean flag = true;
-        for (String validMainInputValue : validMainInputValues) {
-            if (userInput.equals(validMainInputValue)) {
-                flag = false;
-                break;
-            }
-        }
-
-        if (flag) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_MAIN_INPUT.getMessage());
-        }
-    }
-
-    private void checkValidMenuInput(String userInput) {
-        String[] validMainInputValues = {"1", "2", "3"};
-
-        boolean flag = true;
-        for (String validMainInputValue : validMainInputValues) {
-            if (userInput.equals(validMainInputValue)) {
-                flag = false;
-                break;
-            }
-        }
-
-        if (flag) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_MENU_INPUT.getMessage());
-        }
-    }
-
-    private CartProductInfo handleCartProductInput(String userInput) {
-        Matcher matcher = CART_INPUT_PATTERN.matcher(userInput);
-
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_CART_FORMAT.getMessage());
-        }
-
-        return new CartProductInfo(
-                matcher.group(1),
-                Integer.parseInt(matcher.group(2))
-        );
     }
 
     public String readCartMenuInput() throws IOException {
@@ -159,6 +100,59 @@ public class InputView {
         return Integer.parseInt(userInput);
     }
 
+    public String readAfterPayMenu() throws IOException {
+        System.out.println("\n구매 감사합니다. 계속 쇼핑하시겠어요? (y or n)");
+
+        String userInput = br.readLine();
+        checkAfterPayMenuInput(userInput);
+
+        return userInput;
+    }
+
+    private void printMainPage() {
+        System.out.println("안녕하세요. 무무 쇼핑몰 입니다.");
+        System.out.println();
+        System.out.println("1. 상품 구경하기");
+        System.out.println("2. 랜덤쿠폰 발급받기");
+        System.out.println("3. 장바구니 보러가기");
+        System.out.println("4. 포인트 확인하기");
+        System.out.println("5. 주문내역 확인하기");
+        System.out.println("6. 쇼핑 그만하기");
+
+        System.out.println("메뉴중 하나를 선택해주세요. (ex. 1)");
+    }
+
+    private void checkEmptyInput(String userInput) {
+        if (userInput == null || userInput.isEmpty()) {
+            throw new IllegalArgumentException(ErrorMessage.EMPTY_INPUT.getMessage());
+        }
+    }
+
+    private void checkValidMainInput(String userInput) {
+        if (!VALID_MAIN_MENU_INPUT_VALUES.contains(userInput)) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_MAIN_INPUT.getMessage());
+        }
+    }
+
+    private void checkValidMenuInput(String userInput) {
+        if (!VALID_MENU_INPUT_VALUES.contains(userInput)) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_MENU_INPUT.getMessage());
+        }
+    }
+
+    private CartProductInfo handleCartProductInput(String userInput) {
+        Matcher matcher = CART_INPUT_PATTERN.matcher(userInput);
+
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(ErrorMessage.INVALID_CART_FORMAT.getMessage());
+        }
+
+        return new CartProductInfo(
+                matcher.group(1),
+                Integer.parseInt(matcher.group(2))
+        );
+    }
+
     private void checkValidPay(String pay) {
         Matcher matcher = VALID_PAY_PATTERN.matcher(pay);
 
@@ -168,17 +162,8 @@ public class InputView {
     }
 
     private void checkAfterPayMenuInput(String userInput) {
-        if (!(userInput.equals("y") || userInput.equals("n"))) {
+        if (!(userInput.equals(YES) || userInput.equals(NO))) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_AFTER_PAY_MENU_INPUT.getMessage());
         }
-    }
-
-    public String readAfterPayMenu() throws IOException {
-        System.out.println("\n구매 감사합니다. 계속 쇼핑하시겠어요? (y or n)");
-
-        String userInput = br.readLine();
-        checkAfterPayMenuInput(userInput);
-
-        return userInput;
     }
 }

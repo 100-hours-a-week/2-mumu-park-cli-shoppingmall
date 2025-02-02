@@ -1,13 +1,12 @@
-package model.shoppingMall;
+package model.shoppingmall;
 
 import constant.ErrorMessage;
 import dto.*;
-import model.shoppingMall.cart.CartManagement;
-import model.shoppingMall.cart.CartProduct;
-import model.shoppingMall.history.HistoryManagement;
-import model.shoppingMall.payment.PaymentManagement;
-import model.shoppingMall.product.Product;
-import model.shoppingMall.product.ProductManagement;
+import model.shoppingmall.cart.CartManagement;
+import model.shoppingmall.history.HistoryManagement;
+import model.shoppingmall.payment.PaymentManagement;
+import model.shoppingmall.product.Product;
+import model.shoppingmall.product.ProductManagement;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,9 +40,8 @@ public class ShoppingMall {
             throw new IllegalArgumentException(ErrorMessage.OVER_PURCHASE_QUANTITY.getMessage());
         }
 
-        // MinusQuantity 가 productManagement에서 행해져야 하는걸까?
         product.minusQuantity(cartProductInfo.purchaseOrDeleteQuantity());
-        cartManagement.addCart(new CartProduct(product, cartProductInfo.purchaseOrDeleteQuantity()));
+        cartManagement.addCart(product, cartProductInfo);
     }
 
     public List<ProductSimpleInfo> getCartProducts() {
@@ -56,11 +54,10 @@ public class ShoppingMall {
     }
 
     public ChangeAndPoint paymentProgress(LocalDateTime now, PaymentInfo paymentInfo) {
-        // Todo : 1. 잔돈 및 적립 포인트 계산
         ChangeAndPoint changeAndPoint = paymentManagement.calculateChangeAndRewardPoint(paymentInfo);
-        // 2. History에 저장하기
         historyManagement.saveOrder(now, paymentInfo, changeAndPoint);
         cartManagement.deleteAllCartProduct();
+
         return changeAndPoint;
     }
 

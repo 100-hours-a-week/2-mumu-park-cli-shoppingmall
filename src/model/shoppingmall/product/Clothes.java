@@ -1,4 +1,4 @@
-package model.shoppingMall.product;
+package model.shoppingmall.product;
 
 import dto.ProductSimpleInfo;
 

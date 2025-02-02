@@ -1,18 +1,19 @@
 package util;
 
-import model.shoppingMall.cart.CartManagement;
-import model.shoppingMall.history.HistoryManagement;
-import model.shoppingMall.payment.PaymentManagement;
-import model.shoppingMall.product.Bottom;
-import model.shoppingMall.ShoppingMall;
-import model.shoppingMall.product.ProductManagement;
-import model.shoppingMall.product.Top;
+import constant.ErrorMessage;
+import model.shoppingmall.cart.CartManagement;
+import model.shoppingmall.history.HistoryManagement;
+import model.shoppingmall.payment.PaymentManagement;
+import model.shoppingmall.product.Bottom;
+import model.shoppingmall.ShoppingMall;
+import model.shoppingmall.product.ProductManagement;
+import model.shoppingmall.product.Top;
 
 import java.util.List;
 
 public class ProductInitializer {
     private ProductInitializer() {
-        throw new IllegalArgumentException("Utility class");
+        throw new IllegalArgumentException(ErrorMessage.UTILITY_CLASS.getMessage());
     }
 
     public static ShoppingMall init() {

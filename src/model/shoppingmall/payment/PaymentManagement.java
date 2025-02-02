@@ -1,4 +1,4 @@
-package model.shoppingMall.payment;
+package model.shoppingmall.payment;
 
 import dto.ChangeAndPoint;
 import dto.PaymentInfo;

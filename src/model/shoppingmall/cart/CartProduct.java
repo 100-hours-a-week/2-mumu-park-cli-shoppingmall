@@ -1,9 +1,9 @@
-package model.shoppingMall.cart;
+package model.shoppingmall.cart;
 
 import constant.ErrorMessage;
 import dto.ProductSimpleInfo;
-import model.shoppingMall.product.Clothes;
-import model.shoppingMall.product.Product;
+import model.shoppingmall.product.Clothes;
+import model.shoppingmall.product.Product;
 
 public class CartProduct {
     private final Product product;
@@ -12,6 +12,10 @@ public class CartProduct {
     public CartProduct(Product product, int purchaseQuantity) {
         this.product = product;
         this.purchaseQuantity = purchaseQuantity;
+    }
+
+    public void addCartQuantity(int addQuantity) {
+        this.purchaseQuantity += addQuantity;
     }
 
     public ProductSimpleInfo toSimpleInfoDto() {
@@ -38,10 +42,18 @@ public class CartProduct {
     }
 
     public void checkValidDeleteQuantity(int deleteQuantity) {
+        checkDeleteQuantityIsZero(deleteQuantity);
+        checkDeleteQuantityOverCartQuantity(deleteQuantity);
+    }
+
+    private void checkDeleteQuantityIsZero(int deleteQuantity) {
         if (deleteQuantity == 0) {
             throw new IllegalArgumentException(ErrorMessage.ZERO_DELETE_QUANTITY.getMessage());
         }
-        if(deleteQuantity > purchaseQuantity) {
+    }
+
+    private void checkDeleteQuantityOverCartQuantity(int deleteQuantity) {
+        if (deleteQuantity > purchaseQuantity) {
             throw new IllegalArgumentException(ErrorMessage.OVER_DELETE_QUANTITY.getMessage());
         }
     }

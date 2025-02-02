@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class OutputView {
     private static final String TOP = "TOP";
     private static final String BOTTOM = "BOTTOM";
+    private static final String LINE_SEPARATOR = "-------------------------------------------------------";
 
     public void printExceptionMessage(IllegalArgumentException exception) {
         System.out.println(exception.getMessage());
@@ -16,7 +17,7 @@ public class OutputView {
 
     public void printIssuedCoupon(int couponDiscountRate) {
         System.out.println("축하드립니다. " + couponDiscountRate + "% 쿠폰을 발급해드렸습니다.");
-        System.out.println("유효기간은 5분 입니다.");
+        System.out.println("유효기간은 5분 입니다.\n");
     }
 
     public void printUserPoint(int userPoint) {
@@ -26,14 +27,14 @@ public class OutputView {
     public void printProductSimpleInfo(Map<String, List<ProductSimpleInfo>> productSimpleInfos) {
         System.out.println("상품을 구경하고 맘에드는 상품을 장바구니에 넣어보세요.\n");
         System.out.println("[Top]");
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
         List<ProductSimpleInfo> tops = productSimpleInfos.get(TOP);
         for (ProductSimpleInfo top : tops) {
             System.out.println(formatProductSimpleInfo(top));
         }
 
         System.out.println("\n[Bottom]");
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
         List<ProductSimpleInfo> bottoms = productSimpleInfos.get(BOTTOM);
         for (ProductSimpleInfo bottom : bottoms) {
             System.out.println(formatProductSimpleInfo(bottom));
@@ -41,9 +42,9 @@ public class OutputView {
     }
 
     public void printProductDetailInfo(ProductDetailInfo detailInfo) {
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
         System.out.println("[%s]의 상세정보 입니다.".formatted(detailInfo.name()));
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
         System.out.print(detailInfo.getDetail());
         System.out.println("가격 - " + formatPrice(detailInfo.price()));
     }
@@ -65,7 +66,7 @@ public class OutputView {
             totalPrice += cartProduct.price();
         }
         System.out.println("\n총 가격 : " + formatPrice(totalPrice));
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
     }
 
     private String formatProductSimpleInfo(ProductSimpleInfo product) {
@@ -84,15 +85,15 @@ public class OutputView {
     }
 
     public void printSuccessDeleteCartProduct(CartProductInfo deleteInfo) {
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
         System.out.println("[%s] %d개가 정상적으로 삭제되었습니다.".formatted(deleteInfo.name(), deleteInfo.purchaseOrDeleteQuantity()));
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
     }
 
     public void printPaymentInfos(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo) {
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
         System.out.println("결제하실 상품 리스트 입니다.");
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
 
         int totalPrice = 0;
         for (ProductSimpleInfo cartProduct : cartProducts) {
@@ -107,7 +108,7 @@ public class OutputView {
         totalPrice -= userDiscountInfo.getAppliedPoint();
 
         System.out.println("총 가격 : %s".formatted(formatPrice(totalPrice)));
-        System.out.println("-------------------------------------------------------");
+        System.out.println(LINE_SEPARATOR);
 
         if (userDiscountInfo.getCouponRate() == 0 || userDiscountInfo.isCouponUsed()) {
             System.out.println("사용가능한 쿠폰 : 쿠폰 없음");
@@ -128,7 +129,12 @@ public class OutputView {
     }
 
     public void printUserOrderHistory(List<OrderHistory> userOrderHistory) {
+        if (userOrderHistory.isEmpty()) {
+            System.out.println("과거 주문내역이 존재하지 않습니다.\n");
+            return;
+        }
         System.out.println("======== 주문내역 ========");
+
         String result = userOrderHistory.stream()
                 .map(orderHistory -> """
             주문일시 : %s
@@ -150,9 +156,9 @@ public class OutputView {
                                 orderHistory.rewardPoint()
                         )
                 )
-                .collect(Collectors.joining("\n-------------------------------------------------------\n"));
-
+                .collect(Collectors.joining("%s\n".formatted(LINE_SEPARATOR)));
         System.out.println(result);
+        System.out.println("========================\n");
     }
 }
 

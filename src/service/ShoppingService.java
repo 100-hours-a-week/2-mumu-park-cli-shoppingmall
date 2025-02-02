@@ -2,7 +2,7 @@ package service;
 
 import constant.ErrorMessage;
 import dto.*;
-import model.shoppingMall.ShoppingMall;
+import model.shoppingmall.ShoppingMall;
 import model.user.User;
 import util.CouponGenerator;
 
@@ -42,7 +42,6 @@ public class ShoppingService {
     }
 
     public void addProductToCart(CartProductInfo cartProductInfo) {
-        // Todo : 여러개를 장바구니에 담는 기능도 추가해보기
         shoppingMall.addCart(cartProductInfo);
     }
 
@@ -58,7 +57,7 @@ public class ShoppingService {
         return user.generateDiscountInfo(LocalDateTime.now());
     }
 
-    public ChangeAndPoint paymentProgress(PaymentInfo paymentInfo) {
+    public ChangeAndPoint pay(PaymentInfo paymentInfo) {
         ChangeAndPoint changeAndPoint = shoppingMall.paymentProgress(LocalDateTime.now(), paymentInfo);
         user.payProcess(paymentInfo, changeAndPoint.rewardPoint());
 

@@ -19,7 +19,7 @@ public class DiscountInfo {
 
     public void applyCoupon() {
         if (couponRate == 0 || isCouponUsed) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_COUPON.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.COUPON_DOES_NOT_EXIST.getMessage());
         }
 
         isCouponUsed = true;
@@ -33,7 +33,7 @@ public class DiscountInfo {
 
     public void usePoint() {
         if (totalPoint == 0) {
-            throw new IllegalArgumentException(ErrorMessage.NOT_EXIST_POINT.getMessage());
+            throw new IllegalArgumentException(ErrorMessage.POINT_DOES_NOT_EXIST.getMessage());
         }
 
         this.appliedPoint += totalPoint;

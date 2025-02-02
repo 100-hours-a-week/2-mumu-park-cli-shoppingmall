@@ -8,7 +8,6 @@ import view.OutputView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class ShoppingController {
     private final InputView inputView;
@@ -25,91 +24,12 @@ public class ShoppingController {
         String userMainInput = readUserMainInput();
 
         switch (userMainInput) {
-            case "1" -> {
-                browseProductProcess();
-            }
-            case "2" -> {
-                issueRandomCoupon();
-                run();
-            }
-            case "3" -> {
-                cartProcess();
-            }
-            case "4" -> {
-                showUserPoint();
-                run();
-            }
-            case "5" -> {
-                // Todo : 주문목록 조회 기능
-                showUserOrderHistory();
-            }
-            default -> {
-                printExitMessage();
-            }
-        }
-    }
-
-    private void showUserOrderHistory() throws IOException {
-        List<OrderHistory> userOrderHistory = shoppingService.getUserOrderHistory();
-        outputView.printUserOrderHistory(userOrderHistory);
-        run();
-    }
-
-    private void cartProcess() throws IOException {
-        List<ProductSimpleInfo> cartProducts = getCartProducts();
-        outputView.printCartProducts(cartProducts);
-        if (cartProducts.isEmpty())  {
-            run();
-            return;
-        }
-
-        handleCartMenuInput(readCartMenuInput(), cartProducts);
-    }
-
-    private void browseProductProcess() throws IOException {
-        Map<String, List<ProductSimpleInfo>> productSimpleInfos = shoppingService.getProducts();
-        outputView.printProductSimpleInfo(productSimpleInfos);
-
-        handleBrowseProductInput();
-    }
-
-    private void handleBrowseProductInput() throws IOException {
-        processBrowseProductUserInput(readBrowseProductUserInput());
-    }
-
-    private String readBrowseProductUserInput() throws IOException {
-        while (true) {
-            try {
-                return inputView.readBrowseProductUserInput();
-            } catch (IllegalArgumentException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
-    }
-
-    // Todo : 메서드 네이밍 다시하기
-    private void processBrowseProductUserInput(String userInput) throws IOException {
-        while (true) {
-            try {
-                if (userInput.equals("1")) {
-                    outputView.printProductDetailInfo(
-                            shoppingService.getProductDetailInfoByName(
-                                    inputView.readProductName()
-                            )
-                    );
-                    handleBrowseProductInput();
-                } else if (userInput.equals("2")){
-                    CartProductInfo cartProductInfo = inputView.readCartProduct();
-                    shoppingService.addProductToCart(cartProductInfo);
-                    outputView.printSuccessAddCartMessage(cartProductInfo);
-                    browseProductProcess();
-                } else {
-                    run();
-                }
-                break;
-            } catch (IllegalArgumentException e) {
-                outputView.printExceptionMessage(e);
-            }
+            case "1" -> browseProductProcess();
+            case "2" -> issueRandomCoupon();
+            case "3" -> cartProcess();
+            case "4" -> showUserPointProcess();
+            case "5" -> showUserOrderHistoryProcess();
+            default -> printExitMessage();
         }
     }
 
@@ -123,25 +43,77 @@ public class ShoppingController {
         }
     }
 
-    private boolean issueRandomCoupon() throws IOException {
+    private void browseProductProcess() throws IOException {
+        outputView.printProductSimpleInfo(shoppingService.getProducts());
+        handleBrowseProductInput();
+    }
+
+    private void issueRandomCoupon() throws IOException {
+        try {
+            int couponDiscountRate = shoppingService.issueRandomCoupon();
+            outputView.printIssuedCoupon(couponDiscountRate);
+        } catch (IllegalArgumentException e) {
+            outputView.printExceptionMessage(e);
+        } finally {
+            run();
+        }
+    }
+
+    private void cartProcess() throws IOException {
+        List<ProductSimpleInfo> cartProducts = getCartProducts();
+        outputView.printCartProducts(cartProducts);
+
+        if (cartProducts.isEmpty())  {
+            run();
+        } else {
+            handleCartMenuInput(readCartMenuInput(), cartProducts);
+        }
+    }
+
+    private void showUserPointProcess() throws IOException {
+        outputView.printUserPoint(shoppingService.getUserPoint());
+        run();
+    }
+
+    private void showUserOrderHistoryProcess() throws IOException {
+        outputView.printUserOrderHistory(shoppingService.getUserOrderHistory());
+        run();
+    }
+
+    private void handleBrowseProductInput() throws IOException {
+        executeBrowseMenuByUserInput(readBrowseProductUserInput());
+    }
+
+    private String readBrowseProductUserInput() throws IOException {
         while (true) {
             try {
-                int couponDiscountRate = shoppingService.issueRandomCoupon();
-                outputView.printIssuedCoupon(couponDiscountRate);
-                return true;
+                return inputView.readBrowseProductUserInput();
             } catch (IllegalArgumentException e) {
                 outputView.printExceptionMessage(e);
-                run();
             }
         }
     }
 
-    private void showUserPoint() {
-        outputView.printUserPoint(shoppingService.getUserPoint());
+    private void executeBrowseMenuByUserInput(String userInput) throws IOException {
+        while (true) {
+            try {
+                switch (userInput) {
+                    case "1" -> showProductDetailProcess();
+                    case "2" -> addToCartProcess();
+                    default -> run();
+                }
+                break;
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
-    private List<ProductSimpleInfo> getCartProducts() {
-        return shoppingService.getCartProducts();
+    private void showProductDetailProcess() throws IOException {
+        String productName = inputView.readProductName();
+        ProductDetailInfo productDetail = shoppingService.getProductDetailInfoByName(productName);
+        outputView.printProductDetailInfo(productDetail);
+        handleBrowseProductInput();
     }
 
     private String readCartMenuInput() throws IOException {
@@ -154,22 +126,26 @@ public class ShoppingController {
         }
     }
 
+    private List<ProductSimpleInfo> getCartProducts() {
+        return shoppingService.getCartProducts();
+    }
+
+    private void addToCartProcess() throws IOException {
+        CartProductInfo cartProductInfo = inputView.readCartProduct();
+        shoppingService.addProductToCart(cartProductInfo);
+        outputView.printSuccessAddCartMessage(cartProductInfo);
+        browseProductProcess();
+    }
+
     private void handleCartMenuInput(String menuInput, List<ProductSimpleInfo> cartProducts) throws IOException {
-        if (menuInput.equals("1")) {
-            // 결제하기
-            DiscountInfo userDiscountInfo = shoppingService.getUserDiscountInfo();
-            paymentProcess(cartProducts, userDiscountInfo);
-        } else if (menuInput.equals("2")) {
-            // 장바구니 상품 제거
-            deleteCartProductProcess();
-        } else {
-            // 홈으로
-            run();
+        switch (menuInput) {
+            case "1" -> handlePaymentUserInput(cartProducts, shoppingService.getUserDiscountInfo());
+            case "2" -> deleteCartProductProcess();
+            default -> run();
         }
     }
 
-    private void paymentProcess(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo) throws IOException {
-        // Todo : 메서드 분리 필요
+    private void handlePaymentUserInput(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo) throws IOException {
         outputView.printPaymentInfos(cartProducts, userDiscountInfo);
 
         while(true) {
@@ -179,40 +155,15 @@ public class ShoppingController {
                 switch (menuInput) {
                     case "1" -> {
                         userDiscountInfo.applyCoupon();
-                        paymentProcess(cartProducts, userDiscountInfo);
+                        handlePaymentUserInput(cartProducts, userDiscountInfo);
                         return;
                     }
                     case "2" -> {
                         userDiscountInfo.usePoint();
-                        paymentProcess(cartProducts, userDiscountInfo);
+                        handlePaymentUserInput(cartProducts, userDiscountInfo);
                         return;
                     }
-                    default -> {
-                        int finalPrice = userDiscountInfo.getFinalPrice(cartProducts);
-                        outputView.printFinalPrice(finalPrice);
-                        int payAmount = readPayAmount(finalPrice);
-
-                        ChangeAndPoint changeAndPoint = shoppingService.paymentProgress(
-                                new PaymentInfo(
-                                        cartProducts,
-                                        userDiscountInfo.isCouponUsed() ? userDiscountInfo.getCouponRate() : 0,
-                                        userDiscountInfo.getAppliedPoint(),
-                                        finalPrice,
-                                        payAmount
-                                )
-                        );
-
-                        outputView.printPaymentResult(payAmount, changeAndPoint);
-
-                        String userChoice = readAfterPayMenu();
-                        if (userChoice.equals("y")) {
-                            run();
-                            return;
-                        }
-
-                        printExitMessage();
-                        return;
-                    }
+                    default -> paymentProcess(cartProducts, userDiscountInfo);
                 }
             } catch (IllegalArgumentException e) {
                 outputView.printExceptionMessage(e);
@@ -220,28 +171,17 @@ public class ShoppingController {
         }
     }
 
-    private boolean deleteCartProductProcess() throws IOException {
-        while(true) {
-            try {
-                CartProductInfo deleteInfo = readDeleteProductFromCart();
-                shoppingService.deleteCartProduct(deleteInfo);
-                outputView.printSuccessDeleteCartProduct(deleteInfo);
-                cartProcess();
-                return true;
-            } catch (IllegalArgumentException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
-    }
+    private void paymentProcess(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo) throws IOException {
+        int finalPrice = userDiscountInfo.getFinalPrice(cartProducts);
+        outputView.printFinalPrice(finalPrice);
 
-    private CartProductInfo readDeleteProductFromCart() throws IOException {
-        while(true) {
-            try {
-                return inputView.readDeleteProductFromCart();
-            } catch (IllegalArgumentException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
+        int payAmount = readPayAmount(finalPrice);
+        outputView.printPaymentResult(
+                payAmount,
+                shoppingService.pay(createPaymentInfo(cartProducts, userDiscountInfo, finalPrice, payAmount))
+        );
+
+        handlePostPayment();
     }
 
     private int readPayAmount(int finalPrice) throws IOException {
@@ -256,6 +196,25 @@ public class ShoppingController {
         }
     }
 
+    private PaymentInfo createPaymentInfo(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo, int finalPrice, int payAmount) {
+        return new PaymentInfo(
+                cartProducts,
+                userDiscountInfo.isCouponUsed() ? userDiscountInfo.getCouponRate() : 0,
+                userDiscountInfo.getAppliedPoint(),
+                finalPrice,
+                payAmount
+        );
+    }
+
+    private void handlePostPayment() throws IOException {
+        String userChoice = readAfterPayMenu();
+        if (userChoice.equals("y")) {
+            run();
+        } else {
+            printExitMessage();
+        }
+    }
+
     private String readAfterPayMenu() throws IOException {
         while(true) {
             try {
@@ -264,6 +223,32 @@ public class ShoppingController {
                 outputView.printExceptionMessage(e);
             }
         }
+    }
+
+    private boolean deleteCartProductProcess() throws IOException {
+        try {
+            return deleteCartProduct(readDeleteProductFromCart());
+        } catch (IllegalArgumentException e) {
+            outputView.printExceptionMessage(e);
+            return deleteCartProductProcess();
+        }
+    }
+
+    private CartProductInfo readDeleteProductFromCart() throws IOException {
+        while(true) {
+            try {
+                return inputView.readDeleteProductFromCart();
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
+    }
+
+    private boolean deleteCartProduct(CartProductInfo deleteInfo) throws IOException {
+        shoppingService.deleteCartProduct(deleteInfo);
+        outputView.printSuccessDeleteCartProduct(deleteInfo);
+        cartProcess();
+        return true;
     }
 
     private void printExitMessage() {

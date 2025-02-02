@@ -1,5 +1,6 @@
 package util;
 
+import constant.ErrorMessage;
 import model.coupon.Coupon;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ public class CouponGenerator {
     private static final Random randomGenerator = new Random();
 
     private CouponGenerator() {
-        throw new IllegalArgumentException("Utility class");
+        throw new IllegalArgumentException(ErrorMessage.UTILITY_CLASS.getMessage());
     }
 
     public static Coupon issueRandomCoupon() {
