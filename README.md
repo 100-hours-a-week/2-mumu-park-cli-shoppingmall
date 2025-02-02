@@ -17,6 +17,14 @@
 - [x] 내 포인트 조회
 - [x] 주문내역 조회
 ***
+# ✏️ 클래스 다이어그램 ✏️
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bb406d1a-62f9-4053-b935-6c4adbbad138" width="30%">
+  <img src="https://github.com/user-attachments/assets/4e004eaf-02a8-484f-ac69-c3fc25073585" width="30%">
+  <img src="https://github.com/user-attachments/assets/6c05a6dd-4664-49af-aae7-94db6b51af4d" width="30%">
+</p>
+
+***
 
 # 💸 기능 💸
 ### 메인 메뉴
