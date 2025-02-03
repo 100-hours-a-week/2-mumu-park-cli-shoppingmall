@@ -9,9 +9,11 @@ import java.io.IOException;
 
 public class main {
     public static void main(String[] args) throws IOException {
+        OutputView outputView = new OutputView();
+
         ShoppingController controller = new ShoppingController(
-                new InputView(),
-                new OutputView(),
+                new InputView(outputView),
+                outputView,
                 new ShoppingService(ProductInitializer.init(), new User())
         );
 

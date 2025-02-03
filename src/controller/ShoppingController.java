@@ -42,13 +42,8 @@ public class ShoppingController {
     }
 
     private String readUserMainInput() throws IOException {
-        while (true) {
-            try {
-                return inputView.readMainInput();
-            } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
+        return inputView.readMainInput();
+
     }
 
     private void browseProductProcess() throws IOException {
@@ -71,7 +66,7 @@ public class ShoppingController {
         List<ProductSimpleInfo> cartProducts = getCartProducts();
         outputView.printCartProducts(cartProducts);
 
-        if (cartProducts.isEmpty())  {
+        if (cartProducts.isEmpty()) {
             run();
         } else {
             handleCartMenuInput(readCartMenuInput(), cartProducts);
@@ -106,13 +101,7 @@ public class ShoppingController {
     }
 
     private String readBrowseProductUserInput() throws IOException {
-        while (true) {
-            try {
-                return inputView.readBrowseProductUserInput();
-            } catch (IllegalArgumentException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
+        return inputView.readBrowseProductUserInput();
     }
 
     private void showProductDetailProcess() throws IOException {
@@ -123,13 +112,7 @@ public class ShoppingController {
     }
 
     private String readCartMenuInput() throws IOException {
-        while (true) {
-            try {
-                return inputView.readCartMenuInput();
-            } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
+        return inputView.readCartMenuInput();
     }
 
     private List<ProductSimpleInfo> getCartProducts() {
@@ -156,7 +139,7 @@ public class ShoppingController {
     private void handlePaymentUserInput(List<ProductSimpleInfo> cartProducts, DiscountInfo userDiscountInfo) throws IOException {
         outputView.printPaymentInfos(cartProducts, userDiscountInfo);
 
-        while(true) {
+        while (true) {
             try {
                 InputValue inputValue = InputValue.fromValue(inputView.readPaymentMenuInput(), PAY_MENU);
 
@@ -196,7 +179,7 @@ public class ShoppingController {
     }
 
     private int readPayAmount(int finalPrice) throws IOException {
-        while(true) {
+        while (true) {
             try {
                 int payAmount = inputView.readPayAmount();
                 PaymentValidator.checkValidPayAmount(finalPrice, payAmount);
@@ -227,13 +210,7 @@ public class ShoppingController {
     }
 
     private String readAfterPayMenu() throws IOException {
-        while(true) {
-            try {
-                return inputView.readAfterPayMenu();
-            } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
+        return inputView.readAfterPayMenu();
     }
 
     private boolean deleteCartProductProcess() throws IOException {
@@ -246,13 +223,7 @@ public class ShoppingController {
     }
 
     private CartProductInfo readDeleteProductFromCart() throws IOException {
-        while(true) {
-            try {
-                return inputView.readDeleteProductFromCart();
-            } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
-            }
-        }
+        return inputView.readDeleteProductFromCart();
     }
 
     private boolean deleteCartProduct(CartProductInfo deleteInfo) throws IOException {
