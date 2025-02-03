@@ -1,9 +1,9 @@
 package model.shoppingmall.cart;
 
-import constant.ErrorMessage;
 import dto.ProductSimpleInfo;
 import model.shoppingmall.product.Clothes;
 import model.shoppingmall.product.Product;
+import validator.CartValidator;
 
 public class CartProduct {
     private final Product product;
@@ -42,19 +42,6 @@ public class CartProduct {
     }
 
     public void checkValidDeleteQuantity(int deleteQuantity) {
-        checkDeleteQuantityIsZero(deleteQuantity);
-        checkDeleteQuantityOverCartQuantity(deleteQuantity);
-    }
-
-    private void checkDeleteQuantityIsZero(int deleteQuantity) {
-        if (deleteQuantity == 0) {
-            throw new IllegalArgumentException(ErrorMessage.ZERO_DELETE_QUANTITY.getMessage());
-        }
-    }
-
-    private void checkDeleteQuantityOverCartQuantity(int deleteQuantity) {
-        if (deleteQuantity > purchaseQuantity) {
-            throw new IllegalArgumentException(ErrorMessage.OVER_DELETE_QUANTITY.getMessage());
-        }
+        CartValidator.checkDeleteQuantity(purchaseQuantity, deleteQuantity);
     }
 }

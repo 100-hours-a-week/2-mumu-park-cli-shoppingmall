@@ -1,6 +1,9 @@
 package controller;
 
+import constant.InputValue;
+import constant.exception.custom.NoSuchProductInCartException;
 import dto.*;
+
 import service.ShoppingService;
 import validator.PaymentValidator;
 import view.InputView;
@@ -10,6 +13,11 @@ import java.io.IOException;
 import java.util.List;
 
 public class ShoppingController {
+    private static final String YES = "y";
+    private static final String MAIN_MENU = "MAIN_MENU";
+    private static final String PRODUCT_MENU = "PRODUCT_MENU";
+    private static final String CART_MENU = "CART_MENU";
+    private static final String PAY_MENU = "PAY_MENU";
     private final InputView inputView;
     private final OutputView outputView;
     private final ShoppingService shoppingService;
@@ -21,14 +29,14 @@ public class ShoppingController {
     }
 
     public void run() throws IOException {
-        String userMainInput = readUserMainInput();
+        InputValue inputValue = InputValue.fromValue(readUserMainInput(), MAIN_MENU);
 
-        switch (userMainInput) {
-            case "1" -> browseProductProcess();
-            case "2" -> issueRandomCoupon();
-            case "3" -> cartProcess();
-            case "4" -> showUserPointProcess();
-            case "5" -> showUserOrderHistoryProcess();
+        switch (inputValue) {
+            case InputValue.BROWSE_PRODUCT -> browseProductProcess();
+            case InputValue.ISSUE_COUPON -> issueRandomCoupon();
+            case InputValue.CART -> cartProcess();
+            case InputValue.SHOW_POINT -> showUserPointProcess();
+            case InputValue.SHOW_ORDER_HISTORY -> showUserOrderHistoryProcess();
             default -> printExitMessage();
         }
     }
@@ -37,7 +45,7 @@ public class ShoppingController {
         while (true) {
             try {
                 return inputView.readMainInput();
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 outputView.printExceptionMessage(e);
             }
         }
@@ -52,7 +60,7 @@ public class ShoppingController {
         try {
             int couponDiscountRate = shoppingService.issueRandomCoupon();
             outputView.printIssuedCoupon(couponDiscountRate);
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             outputView.printExceptionMessage(e);
         } finally {
             run();
@@ -83,14 +91,15 @@ public class ShoppingController {
     private void executeBrowseMenuByUserInput() throws IOException {
         while (true) {
             try {
-                String userInput = readBrowseProductUserInput();
-                switch (userInput) {
-                    case "1" -> showProductDetailProcess();
-                    case "2" -> addToCartProcess();
+                InputValue inputValue = InputValue.fromValue(readBrowseProductUserInput(), PRODUCT_MENU);
+
+                switch (inputValue) {
+                    case SHOW_DETAIL -> showProductDetailProcess();
+                    case ADD_CART -> addToCartProcess();
                     default -> run();
                 }
                 break;
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 outputView.printExceptionMessage(e);
             }
         }
@@ -117,7 +126,7 @@ public class ShoppingController {
         while (true) {
             try {
                 return inputView.readCartMenuInput();
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 outputView.printExceptionMessage(e);
             }
         }
@@ -135,9 +144,11 @@ public class ShoppingController {
     }
 
     private void handleCartMenuInput(String menuInput, List<ProductSimpleInfo> cartProducts) throws IOException {
-        switch (menuInput) {
-            case "1" -> handlePaymentUserInput(cartProducts, shoppingService.getUserDiscountInfo());
-            case "2" -> deleteCartProductProcess();
+        InputValue inputValue = InputValue.fromValue(menuInput, CART_MENU);
+
+        switch (inputValue) {
+            case PAY -> handlePaymentUserInput(cartProducts, shoppingService.getUserDiscountInfo());
+            case DELETE_CART_PRODUCT -> deleteCartProductProcess();
             default -> run();
         }
     }
@@ -147,14 +158,15 @@ public class ShoppingController {
 
         while(true) {
             try {
-                String menuInput = inputView.readPaymentMenuInput();
-                switch (menuInput) {
-                    case "1" -> {
+                InputValue inputValue = InputValue.fromValue(inputView.readPaymentMenuInput(), PAY_MENU);
+
+                switch (inputValue) {
+                    case USE_COUPON -> {
                         userDiscountInfo.applyCoupon();
                         handlePaymentUserInput(cartProducts, userDiscountInfo);
                         return;
                     }
-                    case "2" -> {
+                    case USE_POINT -> {
                         userDiscountInfo.usePoint(cartProducts);
                         handlePaymentUserInput(cartProducts, userDiscountInfo);
                         return;
@@ -164,7 +176,7 @@ public class ShoppingController {
                         return;
                     }
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 outputView.printExceptionMessage(e);
             }
         }
@@ -189,7 +201,7 @@ public class ShoppingController {
                 int payAmount = inputView.readPayAmount();
                 PaymentValidator.checkValidPayAmount(finalPrice, payAmount);
                 return payAmount;
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 outputView.printExceptionMessage(e);
             }
         }
@@ -207,7 +219,7 @@ public class ShoppingController {
 
     private void handlePostPayment() throws IOException {
         String userChoice = readAfterPayMenu();
-        if (userChoice.equals("y")) {
+        if (userChoice.equals(YES)) {
             run();
         } else {
             printExitMessage();
@@ -218,7 +230,7 @@ public class ShoppingController {
         while(true) {
             try {
                 return inputView.readAfterPayMenu();
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 outputView.printExceptionMessage(e);
             }
         }
@@ -227,7 +239,7 @@ public class ShoppingController {
     private boolean deleteCartProductProcess() throws IOException {
         try {
             return deleteCartProduct(readDeleteProductFromCart());
-        } catch (IllegalArgumentException e) {
+        } catch (NoSuchProductInCartException e) {
             outputView.printExceptionMessage(e);
             return deleteCartProductProcess();
         }
@@ -237,7 +249,7 @@ public class ShoppingController {
         while(true) {
             try {
                 return inputView.readDeleteProductFromCart();
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
                 outputView.printExceptionMessage(e);
             }
         }

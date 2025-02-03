@@ -1,6 +1,7 @@
 package util;
 
-import constant.ErrorMessage;
+import constant.exception.ErrorMessage;
+import constant.exception.custom.UtilityClassException;
 import model.shoppingmall.cart.CartManagement;
 import model.shoppingmall.history.HistoryManagement;
 import model.shoppingmall.payment.PaymentManagement;
@@ -12,8 +13,8 @@ import model.shoppingmall.product.Top;
 import java.util.List;
 
 public class ProductInitializer {
-    private ProductInitializer() {
-        throw new IllegalArgumentException(ErrorMessage.UTILITY_CLASS.getMessage());
+    private ProductInitializer() throws UtilityClassException {
+        throw new UtilityClassException();
     }
 
     public static ShoppingMall init() {

@@ -1,7 +1,10 @@
 package dto;
 
-import constant.ErrorMessage;
+import constant.exception.custom.NoSuchPointException;
+import validator.CouponValidator;
+import validator.PointValidator;
 
+import java.awt.*;
 import java.util.List;
 
 public class DiscountInfo {
@@ -18,10 +21,7 @@ public class DiscountInfo {
     }
 
     public void applyCoupon() {
-        if (couponRate == 0 || isCouponUsed) {
-            throw new IllegalArgumentException(ErrorMessage.COUPON_DOES_NOT_EXIST.getMessage());
-        }
-
+        CouponValidator.checkExistCouponToApply(couponRate, isCouponUsed);
         isCouponUsed = true;
     }
 
@@ -32,9 +32,7 @@ public class DiscountInfo {
     }
 
     public void usePoint(List<ProductSimpleInfo> products) {
-        if (totalPoint == 0) {
-            throw new IllegalArgumentException(ErrorMessage.POINT_DOES_NOT_EXIST.getMessage());
-        }
+        PointValidator.checkExistPointToUse(totalPoint);
 
         int finalPrice = getFinalPrice(products);
         if (finalPrice < totalPoint) {

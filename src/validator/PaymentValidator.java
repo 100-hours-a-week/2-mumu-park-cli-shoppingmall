@@ -1,16 +1,17 @@
 package validator;
 
-import constant.ErrorMessage;
+import constant.exception.custom.LackPaymentAmountException;
+import constant.exception.custom.ValidatorClassException;
 
 public class PaymentValidator {
 
-    private PaymentValidator() {
-        throw new IllegalArgumentException(ErrorMessage.VALIDATOR_CLASS.getMessage());
+    private PaymentValidator() throws ValidatorClassException {
+        throw new ValidatorClassException();
     }
 
     public static void checkValidPayAmount(int finalPrice, int payAmount) {
         if (finalPrice > payAmount) {
-            throw new IllegalArgumentException(ErrorMessage.LACK_PAYMENT_AMOUNT.getMessage());
+            throw new LackPaymentAmountException();
         }
     }
 }
