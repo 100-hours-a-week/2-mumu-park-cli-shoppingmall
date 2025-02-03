@@ -11,7 +11,7 @@ public class OutputView {
     private static final String BOTTOM = "BOTTOM";
     private static final String LINE_SEPARATOR = "-------------------------------------------------------";
 
-    public void printExceptionMessage(IllegalArgumentException exception) {
+    public void printExceptionMessage(Exception exception) {
         System.out.println(exception.getMessage());
     }
 

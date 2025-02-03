@@ -1,12 +1,14 @@
 package model.shoppingmall;
 
-import constant.ErrorMessage;
+import constant.exception.ErrorMessage;
+import constant.exception.custom.OverPurchaseQuantityException;
 import dto.*;
 import model.shoppingmall.cart.CartManagement;
 import model.shoppingmall.history.HistoryManagement;
 import model.shoppingmall.payment.PaymentManagement;
 import model.shoppingmall.product.Product;
 import model.shoppingmall.product.ProductManagement;
+import validator.CartValidator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,10 +37,7 @@ public class ShoppingMall {
 
     public void addCart(CartProductInfo cartProductInfo) {
         Product product = productManagement.findProductByName(cartProductInfo.name());
-
-        if (!product.isValidPurchaseQuantity(cartProductInfo.purchaseOrDeleteQuantity())) {
-            throw new IllegalArgumentException(ErrorMessage.OVER_PURCHASE_QUANTITY.getMessage());
-        }
+        CartValidator.checkPurchaseQuantity(product, cartProductInfo.purchaseOrDeleteQuantity());
 
         product.minusQuantity(cartProductInfo.purchaseOrDeleteQuantity());
         cartManagement.addCart(product, cartProductInfo);

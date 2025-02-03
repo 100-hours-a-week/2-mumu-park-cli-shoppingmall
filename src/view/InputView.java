@@ -1,23 +1,16 @@
 package view;
 
-import constant.ErrorMessage;
 import dto.CartProductInfo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static validator.InputValidator.*;
 
 public class InputView {
-    private static final Pattern CART_INPUT_PATTERN = Pattern.compile("^(.+),(\\d+)$");
-    private static final Pattern VALID_PAY_PATTERN = Pattern.compile(("([1-9]\\d*)$"));
-    private static final Set<String> VALID_MENU_INPUT_VALUES = Set.of("1", "2", "3");
-    private static final Set<String> VALID_MAIN_MENU_INPUT_VALUES = Set.of("1", "2", "3", "4", "5", "6");
-    private static final String YES = "y";
-    private static final String NO = "n";
     private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    private static final String CART_PRODUCT_SEPARATOR = ",";
 
     public InputView() {
     }
@@ -122,48 +115,13 @@ public class InputView {
         System.out.println("메뉴중 하나를 선택해주세요. (ex. 1)");
     }
 
-    private void checkEmptyInput(String userInput) {
-        if (userInput == null || userInput.isEmpty()) {
-            throw new IllegalArgumentException(ErrorMessage.EMPTY_INPUT.getMessage());
-        }
-    }
-
-    private void checkValidMainInput(String userInput) {
-        if (!VALID_MAIN_MENU_INPUT_VALUES.contains(userInput)) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_MAIN_INPUT.getMessage());
-        }
-    }
-
-    private void checkValidMenuInput(String userInput) {
-        if (!VALID_MENU_INPUT_VALUES.contains(userInput)) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_MENU_INPUT.getMessage());
-        }
-    }
-
     private CartProductInfo handleCartProductInput(String userInput) {
-        Matcher matcher = CART_INPUT_PATTERN.matcher(userInput);
+        checkValidCartProductInput(userInput);
 
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_CART_FORMAT.getMessage());
-        }
-
+        String[] split = userInput.split(CART_PRODUCT_SEPARATOR);
         return new CartProductInfo(
-                matcher.group(1),
-                Integer.parseInt(matcher.group(2))
+                split[0],
+                Integer.parseInt(split[1])
         );
-    }
-
-    private void checkValidPay(String pay) {
-        Matcher matcher = VALID_PAY_PATTERN.matcher(pay);
-
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_PAY_FORMAT.getMessage());
-        }
-    }
-
-    private void checkAfterPayMenuInput(String userInput) {
-        if (!(userInput.equals(YES) || userInput.equals(NO))) {
-            throw new IllegalArgumentException(ErrorMessage.INVALID_AFTER_PAY_MENU_INPUT.getMessage());
-        }
     }
 }

@@ -1,6 +1,7 @@
 package model.shoppingmall.product;
 
-import constant.ErrorMessage;
+import constant.exception.custom.NoSuchProductException;
+import constant.exception.custom.UnknownTypeException;
 import dto.ProductDetailInfo;
 import dto.ProductSimpleInfo;
 
@@ -9,6 +10,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ProductManagement {
+    private static final String TOP = "TOP";
+    private static final String BOTTOM = "BOTTOM";
     private final List<Product> products;
 
     public ProductManagement(List<Product> products) {
@@ -20,7 +23,7 @@ public class ProductManagement {
                 .filter(product -> product instanceof Clothes)
                 .map(product -> (Clothes) product)
                 .collect(Collectors.groupingBy(
-                        clothes -> clothes instanceof Top ? "TOP" : "BOTTOM",
+                        clothes -> clothes instanceof Top ? TOP : BOTTOM,
                         Collectors.mapping(Clothes::generateSimpleInfo, Collectors.toList())
                 ));
     }
@@ -34,14 +37,14 @@ public class ProductManagement {
             return bottom.generateDetailInfo();
         }
 
-        throw new IllegalArgumentException(ErrorMessage.UNKNOWN_TYPE.getMessage());
+        throw new UnknownTypeException();
     }
 
     public Product findProductByName(String productName) {
         return products.stream()
                 .filter((p -> p.getName().equals(productName)))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessage.PRODUCT_DOES_NOT_EXIST.getMessage()));
+                .orElseThrow(() -> new NoSuchProductException(productName));
     }
 
     public void addProductQuantity(String productName, int addQuantity) {

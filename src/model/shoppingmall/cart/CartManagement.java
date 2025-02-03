@@ -1,6 +1,6 @@
 package model.shoppingmall.cart;
 
-import constant.ErrorMessage;
+import constant.exception.custom.NoSuchProductInCartException;
 import dto.CartProductInfo;
 import dto.ProductSimpleInfo;
 import model.shoppingmall.product.Product;
@@ -32,9 +32,7 @@ public class CartManagement {
 
     public void deleteProduct(CartProductInfo deleteInfo) {
         CartProduct cartProduct = getCartProductByName(deleteInfo.name())
-                .orElseThrow(
-                        () -> new IllegalArgumentException(ErrorMessage.PRODUCT_DOES_NOT_EXIST_IN_CART.getMessage())
-                );
+                .orElseThrow(NoSuchProductInCartException::new);
 
         cartProduct.checkValidDeleteQuantity(deleteInfo.purchaseOrDeleteQuantity());
         cartProduct.delete(deleteInfo.purchaseOrDeleteQuantity());

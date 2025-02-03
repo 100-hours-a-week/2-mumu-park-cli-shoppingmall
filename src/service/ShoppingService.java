@@ -1,10 +1,10 @@
 package service;
 
-import constant.ErrorMessage;
 import dto.*;
 import model.shoppingmall.ShoppingMall;
 import model.user.User;
 import util.CouponGenerator;
+import validator.CouponValidator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,9 +21,7 @@ public class ShoppingService {
     }
 
     public int issueRandomCoupon() {
-        if (user.hasCoupon(LocalDateTime.now())) {
-            throw new IllegalArgumentException(ErrorMessage.ALREADY_EXIST_COUPON.getMessage());
-        }
+        CouponValidator.checkUserHasCoupon(user);
 
         user.receiveCoupon(CouponGenerator.issueRandomCoupon());
         return user.getCouponDiscountRate();
