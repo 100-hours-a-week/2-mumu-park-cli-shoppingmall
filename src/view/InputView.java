@@ -1,5 +1,6 @@
 package view;
 
+import constant.exception.custom.*;
 import dto.CartProductInfo;
 
 import java.io.BufferedReader;
@@ -11,95 +12,151 @@ import static validator.InputValidator.*;
 public class InputView {
     private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static final String CART_PRODUCT_SEPARATOR = ",";
+    private final OutputView outputView;
 
-    public InputView() {
+    public InputView(OutputView outputView) {
+        this.outputView = outputView;
     }
 
     public String readMainInput() throws IOException {
-        printMainPage();
-        String userInput = br.readLine();
-        checkValidMainInput(userInput);
+        while (true) {
+            try {
+                printMainPage();
+                String userInput = br.readLine();
+                checkValidMainInput(userInput);
 
-        return userInput;
+                return userInput;
+            } catch (RuntimeException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public String readBrowseProductUserInput() throws IOException {
-        System.out.print(
-                """
-                                        
-                        아래의 메뉴를 선택해주세요
-                        1. 상품 상세보기
-                        2. 장바구니 담기
-                        3. 홈으로 돌아가기
+        while (true) {
+            try {
+                System.out.print(
                         """
-        );
+                                                
+                                아래의 메뉴를 선택해주세요
+                                1. 상품 상세보기
+                                2. 장바구니 담기
+                                3. 홈으로 돌아가기
+                                """
+                );
 
-        String userInput = br.readLine();
-        checkValidMenuInput(userInput);
-        return userInput;
+                String userInput = br.readLine();
+                checkValidMenuInput(userInput);
+                return userInput;
+            } catch (IllegalArgumentException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public String readProductName() throws IOException {
-        System.out.println("상품 상세를 보고싶은 상품명을 입력해주세요.");
-        String productName = br.readLine();
-        checkEmptyInput(productName);
+        while (true) {
+            try {
+                System.out.println("상품 상세를 보고싶은 상품명을 입력해주세요.");
+                String productName = br.readLine();
+                checkEmptyInput(productName);
 
-        return productName;
+                return productName;
+            } catch (EmptyInputException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public CartProductInfo readCartProduct() throws IOException {
-        System.out.println("장바구니에 담을 상품명과 수량을 입력해주세요. (ex. 반팔,1)");
-        String cartProductInput = br.readLine();
-        checkEmptyInput(cartProductInput);
+        while (true) {
+            try {
+                System.out.println("장바구니에 담을 상품명과 수량을 입력해주세요. (ex. 반팔,1)");
+                String cartProductInput = br.readLine();
+                checkEmptyInput(cartProductInput);
 
-        return handleCartProductInput(cartProductInput);
+                return handleCartProductInput(cartProductInput);
+            } catch (EmptyInputException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public String readCartMenuInput() throws IOException {
-        System.out.println("아래 메뉴를 선택해주세요.");
-        System.out.println("1. 결제하기");
-        System.out.println("2. 장바구니 상품 제거");
-        System.out.println("3. 홈으로 돌아가기");
+        while (true) {
+            try {
+                System.out.println("아래 메뉴를 선택해주세요.");
+                System.out.println("1. 결제하기");
+                System.out.println("2. 장바구니 상품 제거");
+                System.out.println("3. 홈으로 돌아가기");
 
-        String userInput = br.readLine();
-        checkValidMenuInput(userInput);
+                String userInput = br.readLine();
+                checkValidMenuInput(userInput);
 
-        return userInput;
+                return userInput;
+            } catch (InvalidMenuInputException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public CartProductInfo readDeleteProductFromCart() throws IOException {
-        System.out.println("제거하고 싶은 상품의 상품명과 수량을 입력해주세요. (ex. 연청바지,1)");
-        String userInput = br.readLine();
-        return handleCartProductInput(userInput);
+        while (true) {
+            try {
+                System.out.println("제거하고 싶은 상품의 상품명과 수량을 입력해주세요. (ex. 연청바지,1)");
+                String userInput = br.readLine();
+                return handleCartProductInput(userInput);
+            } catch (InvalidCartFormatException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public String readPaymentMenuInput() throws IOException {
-        System.out.println("아래 메뉴를 선택해주세요.");
-        System.out.println("1. 쿠폰 사용하기");
-        System.out.println("2. 포인트 사용하기");
-        System.out.println("3. 결제하기");
+        while (true) {
+            try {
+                System.out.println("아래 메뉴를 선택해주세요.");
+                System.out.println("1. 쿠폰 사용하기");
+                System.out.println("2. 포인트 사용하기");
+                System.out.println("3. 결제하기");
 
-        String userInput = br.readLine();
-        checkValidMenuInput(userInput);
+                String userInput = br.readLine();
+                checkValidMenuInput(userInput);
 
-        return userInput;
+                return userInput;
+            } catch (InvalidMenuInputException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public int readPayAmount() throws IOException, NumberFormatException {
-        System.out.println("돈을 지불해주세요.");
-        String userInput = br.readLine();
-        checkValidPay(userInput);
+        while (true) {
+            try {
+                System.out.println("돈을 지불해주세요.");
+                String userInput = br.readLine();
+                checkValidPay(userInput);
 
-        return Integer.parseInt(userInput);
+                return Integer.parseInt(userInput);
+            } catch (InvalidPayFormatException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     public String readAfterPayMenu() throws IOException {
-        System.out.println("\n구매 감사합니다. 계속 쇼핑하시겠어요? (y or n)");
+        while (true) {
+            try {
+                System.out.println("\n구매 감사합니다. 계속 쇼핑하시겠어요? (y or n)");
 
-        String userInput = br.readLine();
-        checkAfterPayMenuInput(userInput);
+                String userInput = br.readLine();
+                checkAfterPayMenuInput(userInput);
 
-        return userInput;
+                return userInput;
+            } catch (InvalidAfterPayMenuInputException e) {
+                outputView.printExceptionMessage(e);
+            }
+        }
     }
 
     private void printMainPage() {
