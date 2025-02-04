@@ -7,6 +7,7 @@ import constant.exception.custom.ZeroDeleteQuantityException;
 import model.shoppingmall.product.Product;
 
 public class CartValidator {
+    private static final int INVALID_DELETE_QUANTITY = 0;
     private CartValidator() throws ValidatorClassException {
         throw new ValidatorClassException();
     }
@@ -23,7 +24,7 @@ public class CartValidator {
     }
 
     private static void checkDeleteQuantityIsZero(int deleteQuantity) {
-        if (deleteQuantity == 0) {
+        if (deleteQuantity == INVALID_DELETE_QUANTITY) {
             throw new ZeroDeleteQuantityException();
         }
     }

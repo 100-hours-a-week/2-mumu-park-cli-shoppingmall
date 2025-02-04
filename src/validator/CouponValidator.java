@@ -8,13 +8,14 @@ import model.user.User;
 import java.time.LocalDateTime;
 
 public class CouponValidator {
+    private static final int INVALID_COUPON_RATE = 0;
 
     private CouponValidator() throws ValidatorClassException {
         throw new ValidatorClassException();
     }
 
     public static void checkExistCouponToApply(int couponRate, boolean isCouponUsed) {
-        if (couponRate == 0 || isCouponUsed) {
+        if (couponRate == INVALID_COUPON_RATE || isCouponUsed) {
             throw new NoSuchCouponException();
         }
     }
