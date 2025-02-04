@@ -56,7 +56,7 @@ public class ShoppingController {
             int couponDiscountRate = shoppingService.issueRandomCoupon();
             outputView.printIssuedCoupon(couponDiscountRate);
         } catch (RuntimeException e) {
-            outputView.printExceptionMessage(e);
+            outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
         } finally {
             run();
         }
@@ -95,7 +95,7 @@ public class ShoppingController {
                 }
                 break;
             } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -160,7 +160,7 @@ public class ShoppingController {
                     }
                 }
             } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -185,7 +185,7 @@ public class ShoppingController {
                 PaymentValidator.checkValidPayAmount(finalPrice, payAmount);
                 return payAmount;
             } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -217,7 +217,7 @@ public class ShoppingController {
         try {
             return deleteCartProduct(readDeleteProductFromCart());
         } catch (NoSuchProductInCartException e) {
-            outputView.printExceptionMessage(e);
+            outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             return deleteCartProductProcess();
         }
     }

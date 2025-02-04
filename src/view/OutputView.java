@@ -11,8 +11,12 @@ public class OutputView {
     private static final String BOTTOM = "BOTTOM";
     private static final String LINE_SEPARATOR = "-------------------------------------------------------";
 
-    public void printExceptionMessage(Exception exception) {
-        System.out.println(exception.getMessage());
+    public void handleExceptionMessage(ExceptionDto exceptionDto) {
+        printExceptionMessage(exceptionDto.message());
+    }
+
+    private void printExceptionMessage(String exceptionMessage) {
+        System.out.println(exceptionMessage);
     }
 
     public void printIssuedCoupon(int couponDiscountRate) {

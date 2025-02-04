@@ -2,6 +2,7 @@ package view;
 
 import constant.exception.custom.*;
 import dto.CartProductInfo;
+import dto.ExceptionDto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class InputView {
 
                 return userInput;
             } catch (RuntimeException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -49,7 +50,7 @@ public class InputView {
                 checkValidMenuInput(userInput);
                 return userInput;
             } catch (IllegalArgumentException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -63,7 +64,7 @@ public class InputView {
 
                 return productName;
             } catch (EmptyInputException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -77,7 +78,7 @@ public class InputView {
 
                 return handleCartProductInput(cartProductInput);
             } catch (EmptyInputException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -95,7 +96,7 @@ public class InputView {
 
                 return userInput;
             } catch (InvalidMenuInputException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -107,7 +108,7 @@ public class InputView {
                 String userInput = br.readLine();
                 return handleCartProductInput(userInput);
             } catch (InvalidCartFormatException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -125,7 +126,7 @@ public class InputView {
 
                 return userInput;
             } catch (InvalidMenuInputException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -139,7 +140,7 @@ public class InputView {
 
                 return Integer.parseInt(userInput);
             } catch (InvalidPayFormatException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
@@ -154,7 +155,7 @@ public class InputView {
 
                 return userInput;
             } catch (InvalidAfterPayMenuInputException e) {
-                outputView.printExceptionMessage(e);
+                outputView.handleExceptionMessage(new ExceptionDto(e.getMessage()));
             }
         }
     }
